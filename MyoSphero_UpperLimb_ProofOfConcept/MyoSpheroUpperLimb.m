@@ -3,24 +3,29 @@ classdef MyoSpheroUpperLimb < handle
     % handles to the devices
     myoMex
     sphero
-    idxHead
+    idxHead = 1
     timeOffset = 0
     myoOneIsUpper = true
+    myoSamplesAdvance = 0
     lengthUpper
     lengthLower
     lengthHand
     plotTable = {}
+    RFNU = eye(3)
+    RFNL = eye(3)
+    RFNH = eye(3)
   end
   properties (Dependent)
-    qU_log
-    qL_log
-    qH_log
+    RU_log
+    RL_log
+    RH_log
     logLengthsULH
+    calibStruct
   end
   properties (Constant)
     SPHERO_REMOTE_NAME = 'Sphero-WPP'
-    SPHERO_FRAME_RATE  = 50
-    SPHERO_FRAME_COUNT = 2
+    SPHERO_FRAME_RATE  = 50 % 50
+    SPHERO_FRAME_COUNT = 4 % 2
     % the upper dims conform to: dLU = [LENGTH;0;OFFSET]
     DEFAULT_LENGTH_UPPER = 280
     OFFSET_UPPER = 35
@@ -44,27 +49,36 @@ classdef MyoSpheroUpperLimb < handle
         this.sphero.SetStabilization(true);
         delete(this.sphero);
       end
-      delete(this.myoMex);
-    end
-    function val = get.qU_log(this)
-      if this.myoOneIsUpper
-        val = this.myoMex.myoData(1).quat_log;
-      else
-        val = this.myoMex.myoData(2).quat_log;
+      if ~isempty(this.myoMex)
+        delete(this.myoMex);
       end
     end
-    function val = get.qL_log(this)
+    
+    function val = get.RU_log(this)
       if this.myoOneIsUpper
-        val = this.myoMex.myoData(2).quat_log;
+        val = this.myoMex.myoData(1).rot_log;
       else
-        val = this.myoMex.myoData(1).quat_log;
+        val = this.myoMex.myoData(2).rot_log;
       end
     end
-    function val = get.qH_log(this)
-      val = this.sphero.quat_log;
+    function val = get.RL_log(this)
+      if this.myoOneIsUpper
+        val = this.myoMex.myoData(2).rot_log;
+      else
+        val = this.myoMex.myoData(1).rot_log;
+      end
+    end
+    function val = get.RH_log(this)
+      val = this.sphero.rot_log;
     end
     function val = get.logLengthsULH(this)
-      val = [size(this.qU_log,1),size(this.qL_log,1),size(this.qH_log,1)];
+      val = [size(this.RU_log,3),size(this.RL_log,3),size(this.RH_log,3)];
+    end
+    function val = get.calibStruct(this)
+      val.RFNU = this.RFNU;
+      val.RFNL = this.RFNL;
+      val.RFNH = this.RFNH;
+      % ... and more
     end
     
     %% --- Device
@@ -86,8 +100,7 @@ classdef MyoSpheroUpperLimb < handle
       this.myoMex = MyoMex(2);
       
       % Simply clear logs on both objects (assumed instantaneously) to sync
-      this.sphero.ClearLogs();
-      this.myoMex.myoData.clearLogs();
+      this.clearLogs();
       pause(1);
       
       % Store the time offset in case it's needed later...
@@ -100,22 +113,34 @@ classdef MyoSpheroUpperLimb < handle
     end
     
     %% --- Data
-    function data = popQuatData(this)
-      idxTail = min(this.logLengthsULH);
+    function clearLogs(this)
+      this.myoMex.myoData.clearLogs();
+      this.sphero.ClearLogs();
+      this.idxHead = 1;
+    end
+    function data = popRotData(this)
+      idxTail = min(this.logLengthsULH)
       % read nn samples starting at idxHead
-      idxHead = this.idxHead;
-      qU = this.qU_log(idxHead:idxTail,:);
-      qL = this.qL_log(idxHead:idxTail,:);
-      qH = this.qH_log(idxHead:idxTail,:);
+      idxHead = this.idxHead
+      size(this.sphero.time_log)
+      RU = this.RU_log(:,:,idxHead:idxTail);
+      RL = this.RL_log(:,:,idxHead:idxTail);
+      RH = this.RH_log(:,:,idxHead:idxTail);
       time = this.sphero.time_log(idxHead:idxTail)-this.timeOffset;
       % update idxHead
       this.idxHead = idxTail + 1;
       % pack data into struct
-      data = this.makeDataStruct(time,qU,qL,qH);
+      data = this.makeDataStruct(time,RU,RL,RH);
     end
     
+    function setHomePose(this)
+      idxTail = min(this.logLengthsULH);
+      this.RFNU = this.RU_log(:,:,idxTail);
+      this.RFNL = this.RL_log(:,:,idxTail);
+      this.RFNH = this.RH_log(:,:,idxTail);
+    end
     
-    function drawPlotUpperLimb(this,nameStr)
+    function drawPlotUpperLimb(this,nameStr,calibStruct,dataSample)
       % drawPlotUpperLimb(hAxes)
       %
       % Transform structure:
@@ -131,13 +156,16 @@ classdef MyoSpheroUpperLimb < handle
       
       % TODO validate hAxes
       
+      if nargin<3
+        calibStruct = [];
+        dataSample=[];
+      end
       
       % enforce axes properties
       
       % find name in table
       if ~isempty(this.plotTable)
         idx = find(strcmp(nameStr,this.plotTable{:,1}));
-        assert(~isempty(idx),'Plot name not found in plotTable.');
       end
       
       if isempty(this.plotTable) || isempty(idx)
@@ -169,6 +197,11 @@ classdef MyoSpheroUpperLimb < handle
         this.drawSTL(hx.Ugfx,'LEFT_UPPER.stl','r',0.5);
         this.drawSTL(hx.Lgfx,'LEFT_LOWER.stl','g',0.5);
         this.drawSTL(hx.Hgfx,'LEFT_HAND.stl','b',0.5);
+        this.drawTriad(hx.U,100,4);
+        this.drawTriad(hx.LU,100,4);
+        this.drawTriad(hx.HL,100,4);
+        this.drawTriad(hx.F,400,4);
+        
         % store in plotTable
         this.plotTable{end+1,1} = nameStr; % push name
         this.plotTable{end,2} = hx;        % place handles
@@ -178,19 +211,38 @@ classdef MyoSpheroUpperLimb < handle
       end
       
       % draw current pose
-      idxTail = min(this.logLengthsULH);
-      qU = this.qU_log(idxTail,:);
-      qL = this.qL_log(idxTail,:);
-      qH = this.qH_log(idxTail,:);
-      if isempty(qU) || isempty(qL) || isempty(qH)
-        RU = eye(3);
-        RL = eye(3);
-        RH = eye(3);
+      if isempty(dataSample)
+        % take internal object pose
+        idxTail = min(this.logLengthsULH);
+        %RU = this.RU_log(:,:,end);
+        %RL = this.RL_log(:,:,end);
+        %RH = this.RH_log(:,:,end);
+        RU = this.RU_log(:,:,idxTail);
+        RL = this.RL_log(:,:,idxTail);
+        RH = this.RH_log(:,:,idxTail);
+        if isempty(RU) || isempty(RL) || isempty(RH)
+          RU = eye(3);
+          RL = eye(3);
+          RH = eye(3);
+        end
+        RFNU = this.RFNU;
+        RFNL = this.RFNL;
+        RFNH = this.RFNH;
       else
-        RU = MyoData.q2r(qU);
-        RL = MyoData.q2r(qL);
-        RH = MyoData.q2r(qH);
+        % take provided pose
+        RU = dataSample.RU;
+        RL = dataSample.RL;
+        RH = dataSample.RH;
+        RFNU = calibStruct.RFNU;
+        RFNL = calibStruct.RFNL;
+        RFNH = calibStruct.RFNH;
       end
+      
+      % remove home calibration offset
+      RU = RFNU'*RU;
+      RL = RFNL'*RL;
+      RH = RFNH'*RH;
+      
       RLU = RU'*RL;
       RHL = RL'*RH;
       dLU = [this.lengthUpper;0;this.OFFSET_UPPER];
@@ -217,14 +269,45 @@ classdef MyoSpheroUpperLimb < handle
       end
     end
     
+    function animatePlotUpperLimb(this,nameStr,calibStruct,dataStruct)
+      % animatePlotUpperLimb(this,nameStr,dataStruct)
+      %   Animate a data sequence
+      % dispatch timer
+      tmr = timer(...
+        'executionmode','fixedrate',...
+        'period',0.05,...
+        'busymode','drop',...
+        'timerfcn',@(src,evt)this.animatePlotUpperLimbCallback(src,evt,nameStr,calibStruct,dataStruct),...
+        'stopfcn',@(src,~)delete(src));
+      start(tmr);
+    end
+    function animatePlotUpperLimbCallback(this,src,evt,nameStr,calibStruct,dataStruct)
+      %idx = src.TasksExecuted;
+      if isempty(src.UserData)
+        src.UserData = datenum(evt.Data.time);
+      end
+      currTime = (datenum(evt.Data.time)-src.UserData)*60*60*24;
+      timeVec = dataStruct.time - dataStruct.time(1);
+      idx = find(timeVec>=currTime,1,'first');
+      if ~isempty(idx)
+        dataSample = this.makeDataStruct(...
+          dataStruct.time(idx),...
+          dataStruct.RU(:,:,idx),...
+          dataStruct.RL(:,:,idx),...
+          dataStruct.RH(:,:,idx));
+        this.drawPlotUpperLimb(nameStr,calibStruct,dataSample);
+      else
+        stop(src);
+      end
+    end
   end
   methods (Static)
-    function data = makeDataStruct(time,qU,qL,qH)
+    function data = makeDataStruct(time,RU,RL,RH)
       data.numSamples = length(time);
       data.time = time;
-      data.qU = qU;
-      data.qL = qL;
-      data.qH = qH;
+      data.RU = RU;
+      data.RL = RL;
+      data.RH = RH;
     end
     function drawSTL(h,fname,FC,FA)
       % [v,f,n,c]
@@ -232,6 +315,13 @@ classdef MyoSpheroUpperLimb < handle
       patch('Faces',f,'Vertices',v,'FaceVertexCData',c,...
         'parent',h,'edgecolor','none',...
         'facecolor',FC,'facealpha',FA);
+    end
+    function drawTriad(h,length,thick)
+      z = [0,0];
+      a = [0,length];
+      plot3(h,a,z,z,'r','linewidth',thick);
+      plot3(h,z,a,z,'g','linewidth',thick);
+      plot3(h,z,z,a,'b','linewidth',thick);
     end
   end
 end

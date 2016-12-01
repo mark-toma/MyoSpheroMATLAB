@@ -1,0 +1,1328 @@
+Library {
+  Name			  "sphero_lib"
+  Version		  8.1
+  MdlSubVersion		  0
+  SavedCharacterEncoding  "windows-1252"
+  LibraryType		  "BlockLibrary"
+  SaveDefaultBlockParams  on
+  ScopeRefreshTime	  0.035000
+  OverrideScopeRefreshTime on
+  DisableAllScopes	  off
+  FPTRunName		  "Run 1"
+  MaxMDLFileLineLength	  120
+  Object {
+    $PropName		    "BdWindowsInfo"
+    $ObjectID		    1
+    $ClassName		    "Simulink.BDWindowsInfo"
+    Object {
+      $PropName		      "WindowsInfo"
+      $ObjectID		      2
+      $ClassName	      "Simulink.WindowInfo"
+      IsActive		      [1]
+      Location		      [77.0, 82.0, 924.0, 562.0]
+      Object {
+	$PropName		"ModelBrowserInfo"
+	$ObjectID		3
+	$ClassName		"Simulink.ModelBrowserInfo"
+	Visible			[0]
+	DockPosition		"Left"
+	Width			[50]
+	Height			[50]
+	Filter			[9]
+      }
+      Object {
+	$PropName		"ExplorerBarInfo"
+	$ObjectID		4
+	$ClassName		"Simulink.ExplorerBarInfo"
+	Visible			[1]
+      }
+      Object {
+	$PropName		"EditorsInfo"
+	$ObjectID		5
+	$ClassName		"Simulink.EditorInfo"
+	IsActive		[1]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[874.0, 396.0]
+	ZoomFactor		[1.0]
+	Offset			[22.0, -23.474999934434891]
+      }
+    }
+  }
+  Created		  "Wed Oct 20 08:57:35 2010"
+  Creator		  "gvallabh"
+  UpdateHistory		  "UpdateHistoryNever"
+  ModifiedByFormat	  "%<Auto>"
+  LastModifiedBy	  "gcampa"
+  ModifiedDateFormat	  "%<Auto>"
+  LastModifiedDate	  "Fri Sep 25 19:25:58 2015"
+  RTWModifiedTimeStamp	  365109955
+  ModelVersionFormat	  "1.%<AutoIncrement:116>"
+  ConfigurationManager	  "none"
+  SampleTimeColors	  off
+  SampleTimeAnnotations	  off
+  LibraryLinkDisplay	  "none"
+  WideLines		  off
+  ShowLineDimensions	  off
+  ShowPortDataTypes	  off
+  ShowDesignRanges	  off
+  ShowLoopsOnError	  on
+  IgnoreBidirectionalLines off
+  ShowStorageClass	  off
+  ShowTestPointIcons	  on
+  ShowSignalResolutionIcons on
+  ShowViewerIcons	  on
+  SortedOrder		  off
+  ExecutionContextIcon	  off
+  ShowLinearizationAnnotations on
+  BlockNameDataTip	  off
+  BlockParametersDataTip  off
+  BlockDescriptionStringDataTip	off
+  ToolBar		  on
+  StatusBar		  on
+  BrowserShowLibraryLinks off
+  BrowserLookUnderMasks	  off
+  SimulationMode	  "normal"
+  LinearizationMsg	  "none"
+  Profile		  off
+  ParamWorkspaceSource	  "MATLABWorkspace"
+  RecordCoverage	  off
+  CovSaveName		  "covdata"
+  CovMetricSettings	  "dw"
+  CovNameIncrementing	  off
+  CovHtmlReporting	  on
+  CovForceBlockReductionOff on
+  covSaveCumulativeToWorkspaceVar on
+  CovSaveSingleToWorkspaceVar on
+  CovCumulativeReport	  off
+  CovReportOnPause	  on
+  CovModelRefEnable	  "Off"
+  CovExternalEMLEnable	  off
+  ExtModeBatchMode	  off
+  ExtModeEnableFloating	  on
+  ExtModeTrigType	  "manual"
+  ExtModeTrigMode	  "normal"
+  ExtModeTrigPort	  "1"
+  ExtModeTrigElement	  "any"
+  ExtModeTrigDuration	  1000
+  ExtModeTrigDurationFloating "auto"
+  ExtModeTrigHoldOff	  0
+  ExtModeTrigDelay	  0
+  ExtModeTrigDirection	  "rising"
+  ExtModeTrigLevel	  0
+  ExtModeArchiveMode	  "off"
+  ExtModeAutoIncOneShot	  off
+  ExtModeIncDirWhenArm	  off
+  ExtModeAddSuffixToVar	  off
+  ExtModeWriteAllDataToWs off
+  ExtModeArmWhenConnect	  on
+  ExtModeSkipDownloadWhenConnect off
+  ExtModeLogAll		  on
+  ExtModeAutoUpdateStatusClock on
+  ShowModelReferenceBlockVersion off
+  ShowModelReferenceBlockIO off
+  Array {
+    Type		    "Handle"
+    Dimension		    1
+    Simulink.ConfigSet {
+      $ObjectID		      6
+      Version		      "1.13.0"
+      Array {
+	Type			"Handle"
+	Dimension		8
+	Simulink.SolverCC {
+	  $ObjectID		  7
+	  Version		  "1.13.0"
+	  StartTime		  "0.0"
+	  StopTime		  "10.0"
+	  AbsTol		  "auto"
+	  FixedStep		  "auto"
+	  InitialStep		  "auto"
+	  MaxNumMinSteps	  "-1"
+	  MaxOrder		  5
+	  ZcThreshold		  "auto"
+	  ConsecutiveZCsStepRelTol "10*128*eps"
+	  MaxConsecutiveZCs	  "1000"
+	  ExtrapolationOrder	  4
+	  NumberNewtonIterations  1
+	  MaxStep		  "auto"
+	  MinStep		  "auto"
+	  MaxConsecutiveMinStep	  "1"
+	  RelTol		  "1e-3"
+	  SolverMode		  "SingleTasking"
+	  EnableConcurrentExecution off
+	  ConcurrentTasks	  off
+	  Solver		  "ode45"
+	  SolverName		  "ode45"
+	  SolverJacobianMethodControl "auto"
+	  ShapePreserveControl	  "DisableAll"
+	  ZeroCrossControl	  "UseLocalSettings"
+	  ZeroCrossAlgorithm	  "Nonadaptive"
+	  AlgebraicLoopSolver	  "TrustRegion"
+	  SolverResetMethod	  "Fast"
+	  PositivePriorityOrder	  off
+	  AutoInsertRateTranBlk	  off
+	  SampleTimeConstraint	  "Unconstrained"
+	  InsertRTBMode		  "Whenever possible"
+	}
+	Simulink.DataIOCC {
+	  $ObjectID		  8
+	  Version		  "1.13.0"
+	  Decimation		  "1"
+	  ExternalInput		  "[t, u]"
+	  FinalStateName	  "xFinal"
+	  InitialState		  "xInitial"
+	  LimitDataPoints	  on
+	  MaxDataPoints		  "1000"
+	  LoadExternalInput	  off
+	  LoadInitialState	  off
+	  SaveFinalState	  off
+	  SaveCompleteFinalSimState off
+	  SaveFormat		  "Array"
+	  SignalLoggingSaveFormat "ModelDataLogs"
+	  SaveOutput		  on
+	  SaveState		  off
+	  SignalLogging		  on
+	  DSMLogging		  on
+	  InspectSignalLogs	  off
+	  SaveTime		  on
+	  ReturnWorkspaceOutputs  off
+	  StateSaveName		  "xout"
+	  TimeSaveName		  "tout"
+	  OutputSaveName	  "yout"
+	  SignalLoggingName	  "logsout"
+	  DSMLoggingName	  "dsmout"
+	  OutputOption		  "RefineOutputTimes"
+	  OutputTimes		  "[]"
+	  ReturnWorkspaceOutputsName "out"
+	  Refine		  "1"
+	}
+	Simulink.OptimizationCC {
+	  $ObjectID		  9
+	  Version		  "1.13.0"
+	  Array {
+	    Type		    "Cell"
+	    Dimension		    7
+	    Cell		    "BooleansAsBitfields"
+	    Cell		    "PassReuseOutputArgsAs"
+	    Cell		    "PassReuseOutputArgsThreshold"
+	    Cell		    "ZeroExternalMemoryAtStartup"
+	    Cell		    "ZeroInternalMemoryAtStartup"
+	    Cell		    "OptimizeModelRefInitCode"
+	    Cell		    "NoFixptDivByZeroProtection"
+	    PropName		    "DisabledProps"
+	  }
+	  BlockReduction	  off
+	  BooleanDataType	  off
+	  ConditionallyExecuteInputs on
+	  InlineParams		  off
+	  UseIntDivNetSlope	  off
+	  UseFloatMulNetSlope	  off
+	  UseSpecifiedMinMax	  off
+	  InlineInvariantSignals  off
+	  OptimizeBlockIOStorage  on
+	  BufferReuse		  on
+	  EnhancedBackFolding	  off
+	  StrengthReduction	  off
+	  ExpressionFolding	  on
+	  BooleansAsBitfields	  off
+	  BitfieldContainerType	  "uint_T"
+	  EnableMemcpy		  on
+	  MemcpyThreshold	  64
+	  PassReuseOutputArgsAs	  "Structure reference"
+	  ExpressionDepthLimit	  2147483647
+	  FoldNonRolledExpr	  on
+	  LocalBlockOutputs	  on
+	  RollThreshold		  5
+	  SystemCodeInlineAuto	  off
+	  StateBitsets		  off
+	  DataBitsets		  off
+	  UseTempVars		  off
+	  ZeroExternalMemoryAtStartup on
+	  ZeroInternalMemoryAtStartup on
+	  InitFltsAndDblsToZero	  off
+	  NoFixptDivByZeroProtection off
+	  EfficientFloat2IntCast  off
+	  EfficientMapNaN2IntZero on
+	  OptimizeModelRefInitCode off
+	  LifeSpan		  "inf"
+	  MaxStackSize		  "Inherit from target"
+	  BufferReusableBoundary  on
+	  SimCompilerOptimization "Off"
+	  AccelVerboseBuild	  off
+	  ParallelExecutionInRapidAccelerator on
+	}
+	Simulink.DebuggingCC {
+	  $ObjectID		  10
+	  Version		  "1.13.0"
+	  RTPrefix		  "error"
+	  ConsistencyChecking	  "none"
+	  ArrayBoundsChecking	  "none"
+	  SignalInfNanChecking	  "none"
+	  SignalRangeChecking	  "none"
+	  ReadBeforeWriteMsg	  "UseLocalSettings"
+	  WriteAfterWriteMsg	  "UseLocalSettings"
+	  WriteAfterReadMsg	  "UseLocalSettings"
+	  AlgebraicLoopMsg	  "warning"
+	  ArtificialAlgebraicLoopMsg "warning"
+	  SaveWithDisabledLinksMsg "warning"
+	  SaveWithParameterizedLinksMsg	"none"
+	  CheckSSInitialOutputMsg on
+	  UnderspecifiedInitializationDetection	"Classic"
+	  MergeDetectMultiDrivingBlocksExec "none"
+	  CheckExecutionContextPreStartOutputMsg off
+	  CheckExecutionContextRuntimeOutputMsg	off
+	  SignalResolutionControl "TryResolveAllWithWarning"
+	  BlockPriorityViolationMsg "warning"
+	  MinStepSizeMsg	  "warning"
+	  TimeAdjustmentMsg	  "none"
+	  MaxConsecutiveZCsMsg	  "error"
+	  MaskedZcDiagnostic	  "warning"
+	  IgnoredZcDiagnostic	  "warning"
+	  SolverPrmCheckMsg	  "none"
+	  InheritedTsInSrcMsg	  "warning"
+	  DiscreteInheritContinuousMsg "warning"
+	  MultiTaskDSMMsg	  "error"
+	  MultiTaskCondExecSysMsg "error"
+	  MultiTaskRateTransMsg	  "error"
+	  SingleTaskRateTransMsg  "none"
+	  TasksWithSamePriorityMsg "warning"
+	  SigSpecEnsureSampleTimeMsg "warning"
+	  CheckMatrixSingularityMsg "none"
+	  IntegerOverflowMsg	  "warning"
+	  Int32ToFloatConvMsg	  "warning"
+	  ParameterDowncastMsg	  "error"
+	  ParameterOverflowMsg	  "error"
+	  ParameterUnderflowMsg	  "none"
+	  ParameterPrecisionLossMsg "warning"
+	  ParameterTunabilityLossMsg "warning"
+	  FixptConstUnderflowMsg  "none"
+	  FixptConstOverflowMsg	  "none"
+	  FixptConstPrecisionLossMsg "none"
+	  UnderSpecifiedDataTypeMsg "none"
+	  UnnecessaryDatatypeConvMsg "none"
+	  VectorMatrixConversionMsg "none"
+	  InvalidFcnCallConnMsg	  "error"
+	  FcnCallInpInsideContextMsg "UseLocalSettings"
+	  SignalLabelMismatchMsg  "none"
+	  UnconnectedInputMsg	  "warning"
+	  UnconnectedOutputMsg	  "warning"
+	  UnconnectedLineMsg	  "warning"
+	  SFcnCompatibilityMsg	  "none"
+	  FrameProcessingCompatibilityMsg "warning"
+	  UniqueDataStoreMsg	  "none"
+	  BusObjectLabelMismatch  "warning"
+	  RootOutportRequireBusObject "warning"
+	  AssertControl		  "UseLocalSettings"
+	  EnableOverflowDetection off
+	  ModelReferenceIOMsg	  "none"
+	  ModelReferenceMultiInstanceNormalModeStructChecksumCheck "error"
+	  ModelReferenceVersionMismatchMessage "none"
+	  ModelReferenceIOMismatchMessage "none"
+	  ModelReferenceCSMismatchMessage "none"
+	  UnknownTsInhSupMsg	  "warning"
+	  ModelReferenceDataLoggingMessage "warning"
+	  ModelReferenceSymbolNameMessage "warning"
+	  ModelReferenceExtraNoncontSigs "error"
+	  StateNameClashWarn	  "warning"
+	  SimStateInterfaceChecksumMismatchMsg "warning"
+	  SimStateOlderReleaseMsg "error"
+	  InitInArrayFormatMsg	  "warning"
+	  StrictBusMsg		  "Warning"
+	  BusNameAdapt		  "WarnAndRepair"
+	  NonBusSignalsTreatedAsBus "none"
+	  LoggingUnavailableSignals "error"
+	  BlockIODiagnostic	  "none"
+	  SFUnusedDataAndEventsDiag "warning"
+	  SFUnexpectedBacktrackingDiag "warning"
+	  SFInvalidInputDataAccessInChartInitDiag "warning"
+	  SFNoUnconditionalDefaultTransitionDiag "warning"
+	  SFTransitionOutsideNaturalParentDiag "warning"
+	  SFUnconditionalTransitionShadowingDiag "warning"
+	  SFUndirectedBroadcastEventsDiag "warning"
+	  SFTransitionActionBeforeConditionDiag	"warning"
+	}
+	Simulink.HardwareCC {
+	  $ObjectID		  11
+	  Version		  "1.13.0"
+	  ProdBitPerChar	  8
+	  ProdBitPerShort	  16
+	  ProdBitPerInt		  32
+	  ProdBitPerLong	  32
+	  ProdBitPerLongLong	  64
+	  ProdBitPerFloat	  32
+	  ProdBitPerDouble	  64
+	  ProdBitPerPointer	  32
+	  ProdLargestAtomicInteger "Char"
+	  ProdLargestAtomicFloat  "None"
+	  ProdIntDivRoundTo	  "Undefined"
+	  ProdEndianess		  "Unspecified"
+	  ProdWordSize		  32
+	  ProdShiftRightIntArith  on
+	  ProdLongLongMode	  off
+	  ProdHWDeviceType	  "32-bit Generic"
+	  TargetBitPerChar	  8
+	  TargetBitPerShort	  16
+	  TargetBitPerInt	  32
+	  TargetBitPerLong	  32
+	  TargetBitPerLongLong	  64
+	  TargetBitPerFloat	  32
+	  TargetBitPerDouble	  64
+	  TargetBitPerPointer	  32
+	  TargetLargestAtomicInteger "Char"
+	  TargetLargestAtomicFloat "None"
+	  TargetShiftRightIntArith on
+	  TargetLongLongMode	  off
+	  TargetIntDivRoundTo	  "Undefined"
+	  TargetEndianess	  "Unspecified"
+	  TargetWordSize	  32
+	  TargetTypeEmulationWarnSuppressLevel 0
+	  TargetPreprocMaxBitsSint 32
+	  TargetPreprocMaxBitsUint 32
+	  TargetHWDeviceType	  "Specified"
+	  TargetUnknown		  on
+	  ProdEqTarget		  on
+	}
+	Simulink.ModelReferenceCC {
+	  $ObjectID		  12
+	  Version		  "1.13.0"
+	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
+	  CheckModelReferenceTargetMessage "error"
+	  EnableParallelModelReferenceBuilds off
+	  ParallelModelReferenceErrorOnInvalidPool on
+	  ParallelModelReferenceMATLABWorkerInit "None"
+	  ModelReferenceNumInstancesAllowed "Multi"
+	  PropagateVarSize	  "Infer from blocks in model"
+	  ModelReferencePassRootInputsByReference on
+	  ModelReferenceMinAlgLoopOccurrences off
+	  PropagateSignalLabelsOutOfModel off
+	  SupportModelReferenceSimTargetCustomCode off
+	}
+	Simulink.SFSimCC {
+	  $ObjectID		  13
+	  Version		  "1.13.0"
+	  SFSimEnableDebug	  on
+	  SFSimOverflowDetection  on
+	  SFSimEcho		  on
+	  SimBlas		  on
+	  SimCtrlC		  on
+	  SimExtrinsic		  on
+	  SimIntegrity		  on
+	  SimUseLocalCustomCode	  off
+	  SimParseCustomCode	  on
+	  SimBuildMode		  "sf_incremental_build"
+	}
+	Simulink.RTWCC {
+	  $BackupClass		  "Simulink.RTWCC"
+	  $ObjectID		  14
+	  Version		  "1.13.0"
+	  Array {
+	    Type		    "Cell"
+	    Dimension		    6
+	    Cell		    "IncludeHyperlinkInReport"
+	    Cell		    "GenerateTraceInfo"
+	    Cell		    "GenerateTraceReport"
+	    Cell		    "GenerateTraceReportSl"
+	    Cell		    "GenerateTraceReportSf"
+	    Cell		    "GenerateTraceReportEml"
+	    PropName		    "DisabledProps"
+	  }
+	  SystemTargetFile	  "grt.tlc"
+	  GenCodeOnly		  off
+	  MakeCommand		  "make_rtw"
+	  GenerateMakefile	  on
+	  PackageGeneratedCodeAndArtifacts off
+	  TemplateMakefile	  "grt_default_tmf"
+	  GenerateReport	  off
+	  SaveLog		  off
+	  RTWVerbose		  on
+	  RetainRTWFile		  off
+	  ProfileTLC		  off
+	  TLCDebug		  off
+	  TLCCoverage		  off
+	  TLCAssert		  off
+	  ProcessScriptMode	  "Default"
+	  ConfigurationMode	  "Optimized"
+	  ConfigAtBuild		  off
+	  RTWUseLocalCustomCode	  off
+	  RTWUseSimCustomCode	  off
+	  IncludeHyperlinkInReport off
+	  LaunchReport		  off
+	  PortableWordSizes	  off
+	  GenerateErtSFunction	  off
+	  CreateSILPILBlock	  "None"
+	  CodeExecutionProfiling  off
+	  CodeExecutionProfileVariable "executionProfile"
+	  CodeProfilingSaveOptions "SummaryOnly"
+	  CodeProfilingInstrumentation off
+	  SILDebugging		  off
+	  TargetLang		  "C"
+	  IncludeBusHierarchyInRTWFileBlockHierarchyMap	off
+	  IncludeERTFirstTime	  off
+	  GenerateTraceInfo	  off
+	  GenerateTraceReport	  off
+	  GenerateTraceReportSl	  off
+	  GenerateTraceReportSf	  off
+	  GenerateTraceReportEml  off
+	  GenerateCodeInfo	  off
+	  GenerateWebview	  off
+	  GenerateCodeMetricsReport off
+	  GenerateCodeReplacementReport	off
+	  RTWCompilerOptimization "Off"
+	  CheckMdlBeforeBuild	  "Off"
+	  CustomRebuildMode	  "OnUpdate"
+	  Array {
+	    Type		    "Handle"
+	    Dimension		    2
+	    Simulink.CodeAppCC {
+	      $ObjectID		      15
+	      Version		      "1.13.0"
+	      Array {
+		Type			"Cell"
+		Dimension		19
+		Cell			"IgnoreCustomStorageClasses"
+		Cell			"IgnoreTestpoints"
+		Cell			"InsertBlockDesc"
+		Cell			"SFDataObjDesc"
+		Cell			"SimulinkDataObjDesc"
+		Cell			"DefineNamingRule"
+		Cell			"SignalNamingRule"
+		Cell			"ParamNamingRule"
+		Cell			"InlinedPrmAccess"
+		Cell			"CustomSymbolStr"
+		Cell			"CustomSymbolStrGlobalVar"
+		Cell			"CustomSymbolStrType"
+		Cell			"CustomSymbolStrField"
+		Cell			"CustomSymbolStrFcn"
+		Cell			"CustomSymbolStrFcnArg"
+		Cell			"CustomSymbolStrBlkIO"
+		Cell			"CustomSymbolStrTmpVar"
+		Cell			"CustomSymbolStrMacro"
+		Cell			"ReqsInCode"
+		PropName		"DisabledProps"
+	      }
+	      ForceParamTrailComments off
+	      GenerateComments	      on
+	      IgnoreCustomStorageClasses on
+	      IgnoreTestpoints	      off
+	      IncHierarchyInIds	      off
+	      MaxIdLength	      31
+	      PreserveName	      off
+	      PreserveNameWithParent  off
+	      ShowEliminatedStatement off
+	      OperatorAnnotations     off
+	      IncAutoGenComments      off
+	      SimulinkDataObjDesc     off
+	      SFDataObjDesc	      off
+	      MATLABFcnDesc	      off
+	      IncDataTypeInIds	      off
+	      MangleLength	      1
+	      CustomSymbolStrGlobalVar "$R$N$M"
+	      CustomSymbolStrType     "$N$R$M_T"
+	      CustomSymbolStrField    "$N$M"
+	      CustomSymbolStrFcn      "$R$N$M$F"
+	      CustomSymbolStrFcnArg   "rt$I$N$M"
+	      CustomSymbolStrBlkIO    "rtb_$N$M"
+	      CustomSymbolStrTmpVar   "$N$M"
+	      CustomSymbolStrMacro    "$R$N$M"
+	      DefineNamingRule	      "None"
+	      ParamNamingRule	      "None"
+	      SignalNamingRule	      "None"
+	      InsertBlockDesc	      off
+	      InsertPolySpaceComments off
+	      SimulinkBlockComments   on
+	      MATLABSourceComments    off
+	      EnableCustomComments    off
+	      InternalIdentifier      "Shortened"
+	      InlinedPrmAccess	      "Literals"
+	      ReqsInCode	      off
+	      UseSimReservedNames     off
+	    }
+	    Simulink.GRTTargetCC {
+	      $BackupClass	      "Simulink.TargetCC"
+	      $ObjectID		      16
+	      Version		      "1.13.0"
+	      Array {
+		Type			"Cell"
+		Dimension		15
+		Cell			"GeneratePreprocessorConditionals"
+		Cell			"IncludeMdlTerminateFcn"
+		Cell			"PortableWordSizes"
+		Cell			"SuppressErrorStatus"
+		Cell			"ERTCustomFileBanners"
+		Cell			"GenerateSampleERTMain"
+		Cell			"GenerateTestInterfaces"
+		Cell			"ModelStepFunctionPrototypeControlCompliant"
+		Cell			"CPPClassGenCompliant"
+		Cell			"SupportNonInlinedSFcns"
+		Cell			"PurelyIntegerCode"
+		Cell			"GenerateAllocFcn"
+		Cell			"SupportComplex"
+		Cell			"SupportAbsoluteTime"
+		Cell			"SupportContinuousTime"
+		PropName		"DisabledProps"
+	      }
+	      TargetFcnLib	      "ansi_tfl_table_tmw.mat"
+	      TargetLibSuffix	      ""
+	      TargetPreCompLibLocation ""
+	      CodeReplacementLibrary  "None"
+	      UtilityFuncGeneration   "Auto"
+	      ERTMultiwordTypeDef     "System defined"
+	      ERTMultiwordLength      256
+	      MultiwordLength	      2048
+	      GenerateFullHeader      on
+	      GenerateSampleERTMain   off
+	      GenerateTestInterfaces  off
+	      IsPILTarget	      off
+	      ModelReferenceCompliant on
+	      ParMdlRefBuildCompliant on
+	      CompOptLevelCompliant   on
+	      ConcurrentExecutionCompliant on
+	      IncludeMdlTerminateFcn  on
+	      GeneratePreprocessorConditionals "Disable all"
+	      CombineOutputUpdateFcns off
+	      CombineSignalStateStructs	off
+	      SuppressErrorStatus     off
+	      ERTFirstTimeCompliant   off
+	      IncludeFileDelimiter    "Auto"
+	      ERTCustomFileBanners    off
+	      SupportAbsoluteTime     on
+	      LogVarNameModifier      "rt_"
+	      MatFileLogging	      on
+	      MultiInstanceERTCode    off
+	      SupportNonFinite	      on
+	      SupportComplex	      on
+	      PurelyIntegerCode	      off
+	      SupportContinuousTime   on
+	      SupportNonInlinedSFcns  on
+	      SupportVariableSizeSignals off
+	      EnableShiftOperators    on
+	      ParenthesesLevel	      "Nominal"
+	      MATLABClassNameForMDSCustomization "Simulink.SoftwareTarget.GRTCustomization"
+	      ModelStepFunctionPrototypeControlCompliant off
+	      CPPClassGenCompliant    on
+	      AutosarCompliant	      off
+	      GRTInterface	      on
+	      GenerateAllocFcn	      off
+	      UseMalloc		      off
+	      ExtMode		      off
+	      ExtModeStaticAlloc      off
+	      ExtModeTesting	      off
+	      ExtModeStaticAllocSize  1000000
+	      ExtModeTransport	      0
+	      ExtModeMexFile	      "ext_comm"
+	      ExtModeIntrfLevel	      "Level1"
+	      RTWCAPISignals	      off
+	      RTWCAPIParams	      off
+	      RTWCAPIStates	      off
+	      RTWCAPIRootIO	      off
+	      GenerateASAP2	      off
+	    }
+	    PropName		    "Components"
+	  }
+	}
+	PropName		"Components"
+      }
+      Name		      "Configuration"
+      CurrentDlgPage	      "Solver"
+      ConfigPrmDlgPosition     [ 242, 69, 1122, 699 ] 
+    }
+    PropName		    "ConfigurationSets"
+  }
+  ExplicitPartitioning	  off
+  BlockDefaults {
+    ForegroundColor	    "black"
+    BackgroundColor	    "white"
+    DropShadow		    off
+    NamePlacement	    "normal"
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+    ShowName		    on
+    BlockRotation	    0
+    BlockMirror		    off
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    "center"
+    VerticalAlignment	    "middle"
+    ForegroundColor	    "black"
+    BackgroundColor	    "white"
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+    UseDisplayTextAsClickCallback off
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+  }
+  MaskDefaults {
+    SelfModifiable	    "off"
+    IconFrame		    "on"
+    IconOpaque		    "on"
+    RunInitForIconRedraw    "off"
+    IconRotate		    "none"
+    PortRotate		    "default"
+    IconUnits		    "autoscale"
+  }
+  MaskParameterDefaults {
+    Evaluate		    "on"
+    Tunable		    "on"
+    NeverSave		    "off"
+    Internal		    "off"
+    ReadOnly		    "off"
+    Enabled		    "on"
+    Visible		    "on"
+    ToolTip		    "on"
+  }
+  BlockParameterDefaults {
+    Block {
+      BlockType		      M-S-Function
+      FunctionName	      "matlabfile"
+      DisplayMFileStacktrace  on
+    }
+    Block {
+      BlockType		      SubSystem
+      ShowPortLabels	      "FromPortIcon"
+      Permissions	      "ReadWrite"
+      PermitHierarchicalResolution "All"
+      TreatAsAtomicUnit	      off
+      CheckFcnCallInpInsideContextMsg off
+      SystemSampleTime	      "-1"
+      RTWFcnNameOpts	      "Auto"
+      RTWFileNameOpts	      "Auto"
+      FunctionInterfaceSpec   "void_void"
+      RTWMemSecFuncInitTerm   "Inherit from model"
+      RTWMemSecFuncExecute    "Inherit from model"
+      RTWMemSecDataConstants  "Inherit from model"
+      RTWMemSecDataInternal   "Inherit from model"
+      RTWMemSecDataParameters "Inherit from model"
+      SimViewingDevice	      off
+      DataTypeOverride	      "UseLocalSettings"
+      DataTypeOverrideAppliesTo	"AllNumericTypes"
+      MinMaxOverflowLogging   "UseLocalSettings"
+      SFBlockType	      "NONE"
+      Variant		      off
+      GeneratePreprocessorConditionals off
+    }
+  }
+  System {
+    Name		    "sphero_lib"
+    Location		    [77, 82, 1001, 644]
+    Open		    on
+    ModelBrowserVisibility  off
+    ModelBrowserWidth	    200
+    ScreenColor		    "white"
+    PaperOrientation	    "landscape"
+    PaperPositionMode	    "auto"
+    PaperType		    "usletter"
+    PaperUnits		    "inches"
+    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
+    TiledPageScale	    1
+    ShowPageBoundaries	    off
+    ZoomFactor		    "100"
+    ReportName		    "simulink-default.rpt"
+    SIDHighWatermark	    "36"
+    Block {
+      BlockType		      M-S-Function
+      Name		      "Real-Time Pacer"
+      SID		      "19"
+      Ports		      []
+      Position		      [335, 64, 437, 121]
+      ZOrder		      -9
+      FunctionName	      "msfun_realtime_pacer"
+      Parameters	      "simTimePerRealTime"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		17
+	$ClassName		"Simulink.Mask"
+	Type			"RealTime_Pacer"
+	Description		"Slow down a simulation to track real (i.e., wall clock) elapsed time. \n\n\"Speedup\" specifies the rat"
+	"io between simulation time and real time \n Speedup = N => N sec. of simulation time per sec. of real time\n Speedup "
+	"can be fractional (e.g., 0.5, 1.3). \n Speedup = inf => allow simulation to run at full speed\n\nClick on the Help bu"
+	"tton for details."
+	Help			"web('realtime_pacer_help.html', '-helpbrowser')"
+	Display			"fprintf('Real-Time Pacer\\nSpeedup = %g', simTimePerRealTime)"
+	IconUnits		"normalized"
+	Object {
+	  $PropName		  "Parameters"
+	  $ObjectID		  18
+	  $ClassName		  "Simulink.MaskParameter"
+	  Type			  "edit"
+	  Name			  "simTimePerRealTime"
+	  Prompt		  "Speedup (Simulation Time / Real Time):"
+	  Value			  "1"
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Run command file 1"
+      SID		      "31"
+      Ports		      []
+      Position		      [720, 165, 815, 202]
+      ZOrder		      2
+      DropShadow	      on
+      ShowName		      off
+      OpenFcn		      "rawmotor_sim"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		19
+	$ClassName		"Simulink.Mask"
+	Display			"disp('Command \\nRaw Motors')"
+      }
+      System {
+	Name			"Run command file 1"
+	Location		[16, 52, 292, 679]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Run command file 2"
+      SID		      "33"
+      Ports		      []
+      Position		      [720, 215, 815, 252]
+      ZOrder		      4
+      DropShadow	      on
+      ShowName		      off
+      OpenFcn		      "sph_control_sim"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		20
+	$ClassName		"Simulink.Mask"
+	Display			"disp('Control \\nExample')"
+      }
+      System {
+	Name			"Run command file 2"
+	Location		[16, 52, 292, 679]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Run command file 3"
+      SID		      "36"
+      Ports		      []
+      Position		      [720, 65, 815, 102]
+      ZOrder		      12
+      DropShadow	      on
+      ShowName		      off
+      OpenFcn		      "accel_sim"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		21
+	$ClassName		"Simulink.Mask"
+	Display			"disp('Read Sensor \\n (Acceleration)')"
+      }
+      System {
+	Name			"Run command file 3"
+	Location		[16, 52, 292, 679]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Run command file 6"
+      SID		      "14"
+      Ports		      []
+      Position		      [720, 115, 815, 152]
+      ZOrder		      -15
+      DropShadow	      on
+      ShowName		      off
+      OpenFcn		      "roll_sim"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		22
+	$ClassName		"Simulink.Mask"
+	Display			"disp('Roll and\\n Read Location')"
+      }
+      System {
+	Name			"Run command file 6"
+	Location		[16, 52, 292, 679]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+      }
+    }
+    Block {
+      BlockType		      M-S-Function
+      Name		      "Sphero Raw Motor"
+      SID		      "29"
+      Ports		      [2]
+      Position		      [335, 251, 435, 309]
+      ZOrder		      1
+      FunctionName	      "msfun_sphero_rawmotor"
+      Parameters	      "SpheroVarNumber,  T"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		23
+	$ClassName		"Simulink.Mask"
+	Type			"Sphero Raw Motor"
+	Description		"Every time this block is executed it gets the 2 scalar inputs which specify the speed of the left and r"
+	"ight motors respectively, and calls the MATLAB \"rawMotor\" function to move the Sphero motors accordingly. Note that"
+	" the mode is set to reverse if the specified speed is negative.\n\nThe first parameter in the mask is the name of the"
+	" Sphero object (which must match the one chosen in the Setup block). The second parameter is the sample time.\n\nSee "
+	"the help for more details."
+	Help			"Every time this block is executed it gets the 2 scalar inputs which specify the speed of the left and right m"
+	"otors respectively, and calls the MATLAB \"rawMotor\" function to move the Sphero motors accordingly. Note that the m"
+	"ode is set to reverse if the specified speed is negative.\n\nThe first parameter in the mask is the name of the Spher"
+	"o object (which must match the one chosen in the Setup block). The second parameter is the sample time.\n\nThe corres"
+	"ponding Sphero method is \"rawMotor\", so you can type \"doc sphero.rawMotor\" or \"help sphero.rawMotor\" for more d"
+	"etails."
+	Display			"try\n    SetupBlockName = find_system(bdroot(gcb),'SearchDepth', 1, 'MaskType', 'Sphero Name Setup', 'Sphe"
+	"roVarNumber', SpheroVarNumber);\n    str=get_param(SetupBlockName,'workspaceVarName');\n    fprintf('%s\\nrawMotor\\n"
+	"',str{1});\ncatch\n    fprintf('Workspace var #%s\\nrawMotor\\n',SpheroVarNumber(end))\nend\n\ncolor('gray')\nfprintf"
+	"('\\n\\n [left right]');\n"
+	IconUnits		"normalized"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  2
+	  Object {
+	    $ObjectID		    24
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      4
+	      Cell		      "Existing workspace Sphero variable #1"
+	      Cell		      "Existing workspace Sphero variable #2"
+	      Cell		      "Existing workspace Sphero variable #3"
+	      Cell		      "Existing workspace Sphero variable #4"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "SpheroVarNumber"
+	    Prompt		    "Sphero Variable"
+	    Value		    "Existing workspace Sphero variable #1"
+	    Evaluate		    "off"
+	    Tunable		    "off"
+	  }
+	  Object {
+	    $ObjectID		    25
+	    Type		    "edit"
+	    Name		    "T"
+	    Prompt		    "Sample Time (-1 for inherited)"
+	    Value		    "0.2"
+	    Tunable		    "off"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
+    }
+    Block {
+      BlockType		      M-S-Function
+      Name		      "Sphero Read Locator"
+      SID		      "1"
+      Ports		      [0, 1]
+      Position		      [170, 156, 270, 214]
+      ZOrder		      -1
+      FunctionName	      "msfun_sphero_readlocator"
+      Parameters	      "SpheroVarNumber, T"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		26
+	$ClassName		"Simulink.Mask"
+	Type			"Sphero Read Locator"
+	Description		"Every time this block is executed it calls the MATLAB \"readLocator\" function, which returns the curre"
+	"nt location and velocity components of the Sphero.\n\nThe output of the block is a 5-element vector containing respec"
+	"tively the position along the x and y axes, the velocity along x and y axes, and the speed of the Sphero.\n\nThe firs"
+	"t parameter in the mask is the name of the Sphero object (which must match the one chosen in the Setup block). \nThe "
+	"second parameter is the sample time.\n\nSee the help for more details."
+	Help			"Every time this block is executed it calls the MATLAB readLocator function, which returns the current locatio"
+	"n and velocity components of the Sphero.\n\nThe output of the block is a 5-element vector containing respectively the"
+	" position along the x and y axes, the velocity along x and y axes, and the speed of the Sphero.\n\nAll the data recei"
+	"ved from the sphero are int16 values, which are then casted to doubles at the block output. Specifically, the positio"
+	"ns are signed values in cm, velocities are signed in cm/sec, and the speed is unsigned in cm/sec.\n\nThe first parame"
+	"ter in the mask is the name of the Sphero object (which must match the one chosen in the Setup block). \nThe second p"
+	"arameter is the sample time.\n\nThe corresponding MATLAB command is \"readLocator\", so you can type \"doc sphero.rea"
+	"dLocator\" or \"help sphero.readLocator\" for more details.\n"
+	Display			"try\n    SetupBlockName = find_system(bdroot(gcb),'SearchDepth', 1, 'MaskType', 'Sphero Name Setup', 'Sphe"
+	"roVarNumber', SpheroVarNumber);\n    str=get_param(SetupBlockName,'workspaceVarName');\n    fprintf('%s\\nreadLocator"
+	"\\n',str{1});\ncatch\n    fprintf('Workspace var #%s\\nreadLocator\\n',SpheroVarNumber(end))\nend\n\ncolor('gray')\nf"
+	"printf('\\n\\n [x  y  vx  vy  v]');\n\n\n\n\n"
+	IconUnits		"normalized"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  2
+	  Object {
+	    $ObjectID		    27
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      4
+	      Cell		      "Existing workspace Sphero variable #1"
+	      Cell		      "Existing workspace Sphero variable #2"
+	      Cell		      "Existing workspace Sphero variable #3"
+	      Cell		      "Existing workspace Sphero variable #4"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "SpheroVarNumber"
+	    Prompt		    "Sphero Variable"
+	    Value		    "Existing workspace Sphero variable #1"
+	    Evaluate		    "off"
+	    Tunable		    "off"
+	  }
+	  Object {
+	    $ObjectID		    28
+	    Type		    "edit"
+	    Name		    "T"
+	    Prompt		    "Sample Time (-1 for inherited):"
+	    Value		    "0.2"
+	    Tunable		    "off"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
+    }
+    Block {
+      BlockType		      M-S-Function
+      Name		      "Sphero Read Sensor"
+      SID		      "35"
+      Ports		      [0, 1]
+      Position		      [335, 156, 435, 214]
+      ZOrder		      11
+      FunctionName	      "msfun_sphero_readsensor"
+      Parameters	      "SpheroVarNumber, SensorString, T"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		29
+	$ClassName		"Simulink.Mask"
+	Type			"Sphero Read Sensor"
+	Description		"Every time this block is executed it calls the MATLAB \"readSensor\" function, which reads a specified "
+	"sensor and returns its value.\n\nThe output of the block is a scalar containing the value measured by the sensor.\n\n"
+	"The first parameter in the mask is the name of the Sphero object (which must match the one chosen in the Setup block)"
+	". \nThe second parameter is the sensor to be read.\nThe third parameter is the sample time.\n\nSee the help for more "
+	"details."
+	Help			"Every time this block is executed it calls the MATLAB \"readSensor\" function, which reads a specified sensor"
+	" and returns its value.\n\nThe output of the block is a scalar containing the value measured by the sensor. \nAll the"
+	" data received from the sphero are int16 values, which are then casted to doubles at the block output. Specifically, "
+	"the positions are signed values in cm, velocities are signed in cm/sec, and the speed is unsigned in cm/sec.\n\nThe f"
+	"irst parameter in the mask is the name of the Sphero object (which must match the one chosen in the Setup block). \n\n"
+	"The second parameter is the sensor to be read.It must be one of these strings: 'accelX', 'accelY', 'accelZ', 'gyroX',"
+	" 'gyroY', 'gyroZ','rmotorEmfRaw', 'lmotorEmfRaw', 'lmotorPwmRaw', 'rmotorPwmRaw','imuPitch', 'imuRoll', 'imuYaw', 'ac"
+	"celXFilt', 'accelYFilt','accelZFilt', 'gyroXFilt', 'gyroYFilt', 'gyroZFilt','rmotorEmfFilt', 'lmotorEmfFilt', 'Q0', '"
+	"Q1', 'Q2', 'Q3', 'distX','distY', 'accelOne', 'velX', 'velY'\n\nThe third parameter is the sample time.\n"
+	Display			"try\n    SetupBlockName = find_system(bdroot(gcb),'SearchDepth', 1, 'MaskType', 'Sphero Name Setup', 'Sphe"
+	"roVarNumber', SpheroVarNumber);\n    str=get_param(SetupBlockName,'workspaceVarName');\n    fprintf('%s\\nreadSensor\\"
+	"n',str{1});\ncatch\n    fprintf('Workspace var #%s\\nreadSensor\\n',SpheroVarNumber(end))\nend\n\nsns=get_param(gcb,'"
+	"SensorString');\ncolor('gray')\nfprintf('\\n\\n %s',sns);\n"
+	IconUnits		"normalized"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  3
+	  Object {
+	    $ObjectID		    30
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      4
+	      Cell		      "Existing workspace Sphero variable #1"
+	      Cell		      "Existing workspace Sphero variable #2"
+	      Cell		      "Existing workspace Sphero variable #3"
+	      Cell		      "Existing workspace Sphero variable #4"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "SpheroVarNumber"
+	    Prompt		    "Sphero Variable"
+	    Value		    "Existing workspace Sphero variable #1"
+	    Evaluate		    "off"
+	    Tunable		    "off"
+	  }
+	  Object {
+	    $ObjectID		    31
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      30
+	      Cell		      "accelX"
+	      Cell		      "accelY"
+	      Cell		      "accelZ"
+	      Cell		      "gyroX"
+	      Cell		      "gyroY"
+	      Cell		      "gyroZ"
+	      Cell		      "rmotorEmfRaw "
+	      Cell		      "lmotorEmfRaw"
+	      Cell		      "lmotorPwmRaw "
+	      Cell		      "rmotorPwmRaw"
+	      Cell		      "imuPitch"
+	      Cell		      "imuRoll"
+	      Cell		      "imuYaw"
+	      Cell		      "accelXFilt"
+	      Cell		      "accelYFilt"
+	      Cell		      "accelZFilt"
+	      Cell		      "gyroXFilt"
+	      Cell		      "gyroYFilt"
+	      Cell		      "gyroZFilt"
+	      Cell		      "rmotorEmfFilt"
+	      Cell		      "lmotorEmfFilt"
+	      Cell		      "Q0"
+	      Cell		      "Q1"
+	      Cell		      "Q2"
+	      Cell		      "Q3"
+	      Cell		      "distX"
+	      Cell		      "distY"
+	      Cell		      "accelOne"
+	      Cell		      "velX "
+	      Cell		      "vellY"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "SensorString"
+	    Prompt		    "Sensor"
+	    Value		    "accelX"
+	    Evaluate		    "off"
+	  }
+	  Object {
+	    $ObjectID		    32
+	    Type		    "edit"
+	    Name		    "T"
+	    Prompt		    "Sample Time (-1 for inherited):"
+	    Value		    "1"
+	    Tunable		    "off"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
+    }
+    Block {
+      BlockType		      M-S-Function
+      Name		      "Sphero Variable Name"
+      SID		      "5"
+      Ports		      []
+      Position		      [170, 64, 272, 121]
+      ZOrder		      -5
+      Priority		      "3"
+      FunctionName	      "msfun_sphero_setup"
+      Parameters	      "SpheroVarNumber, workspaceVarName"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		33
+	$ClassName		"Simulink.Mask"
+	Type			"Sphero Name Setup"
+	Description		"An existing workspace Sphero variable must be selected as the mask parameter. That preexisitng Sphero o"
+	"bject is then used during the simulation by the other blocks that specify the same name. The object will continue to "
+	"be available in the workspace after the end of the simulation."
+	Help			"An existing workspace Sphero variable must be selected as the mask parameter. That preexisitng Sphero object "
+	"is then used during the simulation by the other blocks that specify the same name. The object will continue to be ava"
+	"ilable in the workspace after the end of the simulation."
+	Display			"try\n    BluetoothName=evalin('base',[workspaceVarName '.DeviceName']);\ncatch\n    BluetoothName='Unknown"
+	"';\nend\nfprintf('Setup\\n%s\\n%s',workspaceVarName, BluetoothName)\n"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  2
+	  Object {
+	    $ObjectID		    34
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      4
+	      Cell		      "Existing workspace Sphero variable #1"
+	      Cell		      "Existing workspace Sphero variable #2"
+	      Cell		      "Existing workspace Sphero variable #3"
+	      Cell		      "Existing workspace Sphero variable #4"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "SpheroVarNumber"
+	    Prompt		    "Sphero variable"
+	    Value		    "Existing workspace Sphero variable #1"
+	    Evaluate		    "off"
+	    Tunable		    "off"
+	  }
+	  Object {
+	    $ObjectID		    35
+	    Type		    "edit"
+	    Name		    "workspaceVarName"
+	    Prompt		    "Name of existing workspace variable"
+	    Value		    "sph"
+	    Evaluate		    "off"
+	    Tunable		    "off"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
+    }
+    Block {
+      BlockType		      M-S-Function
+      Name		      "Sphero roll"
+      SID		      "2"
+      Ports		      [1]
+      Position		      [170, 251, 270, 309]
+      ZOrder		      -2
+      FunctionName	      "msfun_sphero_roll"
+      Parameters	      "SpheroVarNumber,  T"
+      Object {
+	$PropName		"MaskObject"
+	$ObjectID		36
+	$ClassName		"Simulink.Mask"
+	Type			"Sphero Roll"
+	Description		"Every time this block is executed it gets the 2-elements vector at its input, which contains the desire"
+	"d speed ane heading for the Sphero, and calls the MATLAB \"roll\" function to move the Sphero accordingly.\n\nThe fir"
+	"st parameter in the mask is the name of the Sphero object (which must match the one chosen in the Setup block). The s"
+	"econd parameter is the sample time.\n\nSee the help for more details."
+	Help			"Every time this block is executed it gets the 2-elements vector at its input, which contains the desired spee"
+	"d ane heading for the Sphero, and calls the MATLAB \"roll\" function to move the Sphero accordingly.\n\nThe first par"
+	"ameter in the mask is the name of the Sphero object (which must match the one chosen in the Setup block). The second "
+	"parameter is the sample time.\n\nThe heading is a value from 0 to 360, which is specified with regards to the origina"
+	"l orientation that is set when the Sphero is first connected, or calibrated to. Speed can be between -255 and 255\n\n"
+	"The corresponding Sphero method is \"roll\", so you can type \"doc sphero.roll\" or \"help sphero.roll\" for more det"
+	"ails."
+	Display			"try\n    SetupBlockName = find_system(bdroot(gcb),'SearchDepth', 1, 'MaskType', 'Sphero Name Setup', 'Sphe"
+	"roVarNumber', SpheroVarNumber);\n    str=get_param(SetupBlockName,'workspaceVarName');\n    fprintf('%s\\nroll\\n',st"
+	"r{1});\ncatch\n    fprintf('Workspace var #%s\\nroll\\n',SpheroVarNumber(end))\nend\n\ncolor('gray')\nfprintf('\\n\\n"
+	" [speed heading]');\n"
+	IconUnits		"normalized"
+	Array {
+	  Type			  "Simulink.MaskParameter"
+	  Dimension		  2
+	  Object {
+	    $ObjectID		    37
+	    Type		    "popup"
+	    Array {
+	      Type		      "Cell"
+	      Dimension		      4
+	      Cell		      "Existing workspace Sphero variable #1"
+	      Cell		      "Existing workspace Sphero variable #2"
+	      Cell		      "Existing workspace Sphero variable #3"
+	      Cell		      "Existing workspace Sphero variable #4"
+	      PropName		      "TypeOptions"
+	    }
+	    Name		    "SpheroVarNumber"
+	    Prompt		    "Sphero Variable"
+	    Value		    "Existing workspace Sphero variable #1"
+	    Evaluate		    "off"
+	    Tunable		    "off"
+	  }
+	  Object {
+	    $ObjectID		    38
+	    Type		    "edit"
+	    Name		    "T"
+	    Prompt		    "Sample Time (-1 for inherited)"
+	    Value		    "0.2"
+	    Tunable		    "off"
+	  }
+	  PropName		  "Parameters"
+	}
+      }
+    }
+    Annotation {
+      SID		      "30"
+      Name		      "Copyright 2015, The MathWorks, Inc"
+      Position		      [643, 294]
+      HorizontalAlignment     "left"
+      VerticalAlignment	      "top"
+      ZOrder		      -1
+    }
+    Annotation {
+      SID		      "20"
+      Name		      "SETUP \nAND PACER\nBLOCKS"
+      Position		      [36, 85]
+      HorizontalAlignment     "left"
+      ZOrder		      -1
+    }
+    Annotation {
+      SID		      "21"
+      Name		      "Simulink Library For the Sphero Connectivity Package"
+      Position		      [274, 19]
+      Interpreter	      "tex"
+      ZOrder		      -2
+      FontName		      "@Arial Unicode MS"
+      FontSize		      20
+    }
+    Annotation {
+      SID		      "22"
+      Name		      "READ LOCATOR, \nAND READSENSOR \nBLOCKS"
+      Position		      [36, 176]
+      HorizontalAlignment     "left"
+      ZOrder		      -3
+    }
+    Annotation {
+      SID		      "27"
+      Name		      "Examples"
+      Position		      [768, 19]
+      Interpreter	      "tex"
+      ZOrder		      -8
+      FontName		      "@Arial Unicode MS"
+      FontSize		      20
+    }
+    Annotation {
+      SID		      "34"
+      Name		      "ROLL AND \nRAWMOTOR\nBLOCKS"
+      Position		      [36, 271]
+      HorizontalAlignment     "left"
+      ZOrder		      -1
+    }
+  }
+}

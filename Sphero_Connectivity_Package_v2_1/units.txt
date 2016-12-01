@@ -1,0 +1,65 @@
+
+ACTUATORS:
+
+-----------------------------------------------------------------------------------------
+Command                                             Range              units
+-----------------------------------------------------------------------------------------
+
+rawMotor(sph, name, value)                          name: left,right
+                                                    value: 0 to 255     0:off, 255:max
+
+roll(sph, speed, heading)                           speed: -255 to 255
+                                                    heading: 0 to 360
+ 
+backLEDBrightness   (brightness of blue back LED)   0 to 255            0:off, 255:max 
+color               (RGB Values of main LEDs)       0 to 255            0:off, 255:max 
+-----------------------------------------------------------------------------------------
+
+
+SENSORS:
+
+-----------------------------------------------------------------------------------------
+Identifier          Sensor                          Range               units/LSB
+-----------------------------------------------------------------------------------------
+
+accelX              accelerometer axis X, raw       -2048 to 2047       4mG
+accelY              accelerometer axis Y, raw       -2048 to 2047       4mG
+accelZ              accelerometer axis Z, raw       -2048 to 2047       4mG
+
+gyroX               gyro axis X, raw                -32768 to 32767     0.068 degrees
+gyroY               gyro axis Y, raw                -32768 to 32767     0.068 degrees
+gyroZ               gyro axis Z, raw                -32768 to 32767     0.068 degrees
+
+rmotorEmfRaw        right motor back EMF, raw       -32768 to 32767     22.5 cm
+lmotorEmfRaw        left motor back EMF, raw        -32768 to 32767     22.5 cm
+lmotorPwmRaw        left motor, PWM, raw            -2048 to 2047       duty cycle
+rmotorPwmRaw        right motor, PWM, raw           -2048 to 2047       duty cycle
+
+imuPitch            IMU pitch angle, filtered       -179 to 180         degrees
+imuRoll             IMU roll angle, filtered        -179 to 180         degrees
+imuYaw              IMU yaw angle, filtered         -179 to 180         degrees
+
+accelXFilt          accelerometer axis X, filtered  -32768 to 32767     1/4096 G
+accelYFilt          accelerometer axis Y, filtered  -32768 to 32767     1/4096 G
+accelZFilt          accelerometer axis Z, filtered  -32768 to 32767     1/4096 G
+
+gyroXFilt           gyro axis X, filtered           -20000 to 20000     0.1 dps
+gyroYFilt           gyro axis X, filtered           -20000 to 20000     0.1 dps
+gyroZFilt           gyro axis X, filtered           -20000 to 20000     0.1 dps
+
+rmotorEmfFilt       right motor back EMF, filtered  -32768 to 32767     22.5 cm
+lmotorEmfFilt       left motor back EMF, filtered   -32768 to 32767     22.5 cm
+
+Q0                  Quaternion Q0                   -10000 to 10000     1/10000 Q
+Q1                  Quaternion Q1                   -10000 to 10000     1/10000 Q
+Q2                  Quaternion Q2                   -10000 to 10000     1/10000 Q
+Q3                  Quaternion Q3                   -10000 to 10000     1/10000 Q
+
+distX               Odometer X                      -32768 to 32767     cm
+distY               Odometer Y                      -32768 to 32767     cm
+
+accelOne            AccelOne                        0 to 8000           1 mG
+
+velX                Velocity X                      -32768 to 32767     mm/s
+velY                Velocity Y                      -32768 to 32767     mm/s
+-----------------------------------------------------------------------------------------
