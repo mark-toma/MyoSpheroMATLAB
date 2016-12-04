@@ -102,7 +102,7 @@ t = toc;
 fprintf('\tElapsed time = ');
 fprintf('%3.1f[s]\n',t);  
 while t < duration
-  pause(0.1)
+  pause(0.2);
   fprintf('\b\b\b\b\b\b\b%3.1f[s]\n',t);
   t = toc;
 end
@@ -272,7 +272,7 @@ function pb_cal_pnt_1_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_cal_pnt_1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-cal_pnt_Dispatch(hObject,5,handles);
+cal_pnt_Dispatch(hObject,3,handles);
 
 
 % --- Executes on button press in pb_cal_pnt_2.
@@ -280,7 +280,7 @@ function pb_cal_pnt_2_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_cal_pnt_2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-cal_pnt_Dispatch(hObject,5,handles);
+cal_pnt_Dispatch(hObject,3,handles);
 
 
 % --- Executes on button press in pb_cal_pnt_3.
@@ -288,7 +288,7 @@ function pb_cal_pnt_3_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_cal_pnt_3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-cal_pnt_Dispatch(hObject,5,handles);
+cal_pnt_Dispatch(hObject,3,handles);
 
 
 % --- Executes on button press in pb_calibrate.

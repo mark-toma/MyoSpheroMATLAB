@@ -135,9 +135,10 @@ classdef MyoSpheroUpperLimb < handle
     
     %% --- Data
     function calibrate(this,calibPointsData)
-      
+      this.sphero.rot_log
       calib = this.calib;
-      save(fullfile(this.appDataPath,'cal'),'calib','calibPointsData');
+      fn = fullfile(this.appDataPath,this.timestampedFilename('cal','mat'));
+      save(fn,'calib','calibPointsData');
       
       for ii=1:length(calibPointsData)
         calibPointsData(ii)
@@ -343,6 +344,10 @@ classdef MyoSpheroUpperLimb < handle
       plot3(h,a,z,z,'r','linewidth',thick);
       plot3(h,z,a,z,'g','linewidth',thick);
       plot3(h,z,z,a,'b','linewidth',thick);
+    end
+    function fn = timestampedFilename(name,ext)
+      ts = datestr(now,'yyyymmdd-HHMMSS');
+      fn = sprintf('%s-%s.%s',name,ts,ext);
     end
   end
 end
