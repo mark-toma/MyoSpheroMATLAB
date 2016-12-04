@@ -686,7 +686,7 @@ classdef (Hidden = true) BluetoothApi<sphero.Communication
                             sensordata.(obj.Sensors{j})(end+1) =  obj.cmdFromByte(data(i,2*j-1:2*j), 'int16');
                       end
                     end
-
+%disp('setting SensorData in BluetoothApi')
                     obj.SensorData = sensordata;
                     obj.SensorDataPropertySet = 1;
 
