@@ -431,6 +431,30 @@ classdef MyoSpheroUpperLimb < handle
         Dceq = [Dceq,Dfeq];
       end
     end
+    function [f,feq,Df,Dfeq] = distFunGrad(x,params)
+      % hij  = 1/2*x'*Qij*x - rcicj^2 = 0; i=2,2,3; j=3,1,1
+      % Dhij = Qij*x
+      f = []; feq = []; Df = []; Dfeq = [];
+      Z = zeros(3);
+      I = eye(3);
+      Q23 = 2*Qij(2,3);
+      Q21 = 2*Qij(2,1);
+      Q31 = 2*Qij(3,1);
+      function Q = Qij(ii,jj)
+        Q = zeros(12);
+        Q(3*ii+(1:3),3*ii+(1:3)) = eye(3);
+        Q(3*jj+(1:3),3*jj+(1:3)) = eye(3);
+        Q(3*ii+(1:3),3*jj+(1:3)) = -eye(3);
+        Q(3*jj+(1:3),3*ii+(1:3)) = -eye(3);
+      end
+      feq(1,1) = 1/2*x'*Q23*x - params.rc2c3'*params.rc2c3;
+      feq(1,2) = 1/2*x'*Q21*x - params.rc2c1'*params.rc2c1;
+      feq(1,3) = 1/2*x'*Q31*x - params.rc3c1'*params.rc3c1;
+      
+      Dfeq(:,1) = Q23*x;
+      Dfeq(:,2) = Q21*x;
+      Dfeq(:,3) = Q31*x;
+    end
     function [f,feq,Df,Dfeq] = orthoFunGrad(x,params)
       % h  = 1/2*x'*Q*x = 0
       % Dh = Q*x
@@ -445,31 +469,6 @@ classdef MyoSpheroUpperLimb < handle
       feq = 1/2*x'*Q*x;
       Dfeq = Q*x;
     end
-    function [f,feq,Df,Dfeq] = distFunGrad(x,params)
-      % hij  = 1/2*x'*Qij*x - rcicj^2 = 0; i=2,2,3; j=3,1,1
-      % Dhij = Qij*x
-      f = []; feq = []; Df = []; Dfeq = [];
-      Z = zeros(3);
-      I = eye(3);
-      Q23 = 2*Qij(2,3);
-      Q21 = 2*Qij(2,1);
-      Q31 = 2*Qij(3,1);
-      function Q = Qij(ii,jj)
-        Q = zeros(12);
-        Q(3*(ii-1)+(1:3),3*(ii-1)+(1:3)) = eye(3);
-        Q(3*(jj-1)+(1:3),3*(jj-1)+(1:3)) = eye(3);
-        Q(3*(ii-1)+(1:3),3*(jj-1)+(1:3)) = -eye(3);
-        Q(3*(jj-1)+(1:3),3*(ii-1)+(1:3)) = -eye(3);
-      end
-      feq(1,1) = 1/2*x'*Q23*x - params.rc2c3'*params.rc2c3;
-      feq(1,2) = 1/2*x'*Q21*x - params.rc2c1'*params.rc2c1;
-      feq(1,3) = 1/2*x'*Q31*x - params.rc3c1'*params.rc3c1;
-      
-      Dfeq(:,1) = Q23*x;
-      Dfeq(:,2) = Q21*x;
-      Dfeq(:,3) = Q31*x;
-    end
-    
     function [f,feq,Df,Dfeq] = normalHorzFunGrad(x,params)
       % h  = 1/2*x'*Q*x - rc2c3j*rc2c1 = 0
       % Dh = Q*x
@@ -609,13 +608,17 @@ classdef MyoSpheroUpperLimb < handle
         params.dT0;...
         params.dT0 - params.rc2c3];
       
+%       optimOpts = optimoptions('fmincon',...
+%         'display','iter',...
+%         'algorithm','sqp',...
+%         'gradobj','on',...
+%         'gradconstr','on',...
+%         'tolfun',1e-9,...
+%         'tolcon',1e-9);
       optimOpts = optimoptions('fmincon',...
         'display','iter',...
-        'algorithm','sqp',...
         'gradobj','on',...
-        'gradconstr','on',...
-        'tolfun',1e-9,...
-        'tolcon',1e-9);
+        'gradconstr','on');
       objFunGrad = @(x)MyoSpheroUpperLimb.objFun(x,params);
       nonlinConFunGrad = @(x)MyoSpheroUpperLimb.nonlinConFunGrad(x,params);
       [xs,fval,exitFlag,output,lambda] = ...
@@ -644,18 +647,35 @@ classdef MyoSpheroUpperLimb < handle
       zT = skew(xT)*yT;
       RT = [xT,yT,zT];
       
-      % check xT,yT orthogonality
-      fprintf('xT''yT = %f\n',xT'*yT)
-      
-      % check xT,yT vertical components
-      fprintf('xT(3) = %f\n',xT(3));
-      fprintf('yT(3) = %f\n',yT(3));
+      nT = skew(rc2c3)*rc2c1;
       
       % relative vector lengths
+      fprintf('dist\n');
       fprintf('rc2c1 delta = %f\n',abs(norm(ms.rc2c1)-norm(rc2c1)));
       fprintf('rc2c3 delta = %f\n',abs(norm(ms.rc2c3)-norm(rc2c3)));
       fprintf('rc3c1 delta = %f\n',abs(norm(ms.rc3c1)-norm(rc3c1)));
+      fprintf('\n');
       
+      % check xT,yT orthogonality
+      fprintf('ortho\n');
+      fprintf('xT''*yT = %f\n',xT'*yT)
+      fprintf('\n');
+      
+      % check xT,yT vertical components
+      fprintf('planar\n');
+      fprintf('xT(3) = %f\n',xT(3));
+      fprintf('yT(3) = %f\n',yT(3));
+      fprintf('\n');
+      
+      
+      fprintf('normalHorz\n');
+      fprintf('nT(1) = %f\n',nT(1));
+      fprintf('nT(2) = %f\n',nT(2));
+      fprintf('\n');
+      
+      fprintf('normalVert\n');
+      fprintf('nT(3) delta = %f\n',nT(3)-norm(rc2c3)*norm(rc2c1));
+      fprintf('\n');
       
     end
   end

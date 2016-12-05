@@ -71,7 +71,7 @@ Q31 = 2*[...
   Z,  Z,  Z,  Z;...
   Z, -I,  Z,  I];
 
-%% Normal in plane constraint
+%% ortho
 
 % dot product of xT and yT
 h = transpose(rc2c3)*rc2c1
@@ -84,7 +84,7 @@ Q = [...
   Z,  I,  -I,  Z];
 
 
-%% Orientation constraints
+%% Orientation constraints - normalVert and normalHorz
 % Only the variable terms are calculated.
 % There are five constraints on 9 free parameters.
 % The first 3 are nonlinear (quadratic), and they enforce the fact that the
