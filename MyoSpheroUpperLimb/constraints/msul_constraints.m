@@ -1,4 +1,5 @@
 %% msul_constraints
+% derivation on constraint formulas
 
 clear all; close all; clc;
 
@@ -41,7 +42,7 @@ S3 = skew(e3);
 Z = sym(zeros(3));
 I = eye(3);
 
-%% Distance constraints
+%% Geometry constraints
 
 h = transpose(rc2c3)*rc2c3
 [Q,r]=f2Q(h,x)
@@ -69,6 +70,18 @@ Q31 = 2*[...
   Z,  I,  Z, -I;...
   Z,  Z,  Z,  Z;...
   Z, -I,  Z,  I];
+
+%% Normal in plane constraint
+
+% dot product of xT and yT
+h = transpose(rc2c3)*rc2c1
+[Q_,r]=f2Q(h,x)
+
+Q = [...
+  Z,  Z,   Z,  Z;...
+  Z,  Z,  -I,  I;...
+  Z, -I, 2*I, -I;...
+  Z,  I,  -I,  Z];
 
 
 %% Orientation constraints

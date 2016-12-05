@@ -19,7 +19,7 @@ classdef MyoSpheroUpperLimb < handle
     DUMMY_FILENAME = 'do-not-touch-me.mat'
     calibData
     dT % TODO move this to dependent on dCiF
-    dTguess = [300;-250;-250]
+    dT0 = [300;-250;-250]
   end
   properties (Dependent)
     data
@@ -44,6 +44,11 @@ classdef MyoSpheroUpperLimb < handle
     % default dSH = [LENGTH_HAND;0;-38(radius of sphero)]
     DEFAULT_LENGTH_HAND  = 50
     RADIUS_SPHERO = 38
+    
+    rc2c1 = [0;197.67;0];
+    rc2c3 = [350.07;0;0];
+    rc3c1 = [-350.07;197.67;0];
+    
   end
   
   methods
@@ -133,10 +138,18 @@ classdef MyoSpheroUpperLimb < handle
     
     %% --- Data
     function calibrate(this,calibPointsData)
-      this.sphero.rot_log
       calib = this.calib;
-      fn = fullfile(this.appDataPath(),this.timestampedFilename('cal','mat'));
-      save(fn,'calib','calibPointsData');
+      data = calibPointsData;
+      
+      params = this.makeCalibParams(calib,data,{'dist','orientPlanar'});
+      [xs,fval,exitFlag,output,lambda] = this.computeCalibration(params);
+      
+      [lengths,dT,RT] = this.interpretCalibResult(xs);
+      this.lengthUpper = lengths(1);
+      this.lengthLower = lengths(2);
+      this.lengthHand  = lengths(3);
+      this.dT = dT;
+      this.RT = RT;
       
       for ii=1:length(calibPointsData)
         calibPointsData(ii)
@@ -292,7 +305,7 @@ classdef MyoSpheroUpperLimb < handle
       dT = this.dT;
       if isempty(dT); dT = this.dTguess; end
       
-      set(hx.T,'matrix',rt2tr(eye(3),dT));      
+      set(hx.T,'matrix',rt2tr(eye(3),dT));
       
       drawnow;
       
@@ -364,14 +377,286 @@ classdef MyoSpheroUpperLimb < handle
     function val = appDataPath()
       val = fullfile(MyoSpheroUpperLimb.installRootPath,'appdata');
     end
-    function [Aeq,beq] = orientPlanarFun(params)
+    function [Aeq,beq] = planarFun(params)
       Aeq = [];
       beq = [];
-      if ~ismember('orientPlanar',params.conSpec), return; end
+      if ~ismember('planar',params.conSpec), return; end
       Aeq = [...
         0, 0, 0, 0, 0, -1, 0, 0, 1, 0, 0,  0;...
         0, 0, 0, 0, 0,  0, 0, 0, 1, 0, 0, -1];
       beq = [0;0];
+    end
+    function [c,ceq,Dc,Dceq] = nonlinConFunGrad(x,params)
+      % nonlinConFunGrad(x,params)
+      %
+      % Required params:
+      %   params.rc2c3
+      %   params.rc2c1
+      %   params.rc3c1
+      % Specifies param:
+      %   params.conSpec = Cell array of strings
+      %     'dist' - select the distance constraints
+      %     'ortho' - xT and yT orthogonal
+      %     'normalVert' - nT vertical component
+      %     'normalHorz' - nT horizontal components
+      %
+      % Note on dimensions of constraintf f and constraint gradients Df...
+      %   * List scalar constraints across the columns of a row vector.
+      %   * List column vector constraint gradients across the corresponding
+      %     columns of a matrx.
+      c = [];
+      ceq = [];
+      Dc = [];
+      Dceq = [];
+      if ismember('dist',params.conSpec)
+        [f,feq,Df,Dfeq] = MyoSpheroUpperLimb.distFunGrad(x,params);
+        pushNewCons();
+      end
+      if ismember('ortho',params.conSpec)
+        [f,feq,Df,Dfeq] = MyoSpheroUpperLimb.orthoFunGrad(x,params);
+        pushNewCons();
+      end
+      if ismember('normalVert',params.conSpec)
+        [f,feq,Df,Dfeq] = MyoSpheroUpperLimb.normalVertFunGrad(x,params);
+        pushNewCons();
+      end
+      if ismember('normalHorz',params.conSpec)
+        [f,feq,Df,Dfeq] = MyoSpheroUpperLimb.normalHorzFunGrad(x,params);
+        pushNewCons();
+      end
+      function pushNewCons()
+        c = [c,f];
+        ceq = [ceq,feq];
+        Dc = [Dc,Df];
+        Dceq = [Dceq,Dfeq];
+      end
+    end
+    function [f,feq,Df,Dfeq] = orthoFunGrad(x,params)
+      % h  = 1/2*x'*Q*x = 0
+      % Dh = Q*x
+      f = []; feq = []; Df = []; Dfeq = [];
+      I = eye(3);
+      Z = zeros(3);
+      Q = [...
+        Z,  Z,   Z,  Z;...
+        Z,  Z,  -I,  I;...
+        Z, -I, 2*I, -I;...
+        Z,  I,  -I,  Z];
+      feq = 1/2*x'*Q*x;
+      Dfeq = Q*x;
+    end
+    function [f,feq,Df,Dfeq] = distFunGrad(x,params)
+      % hij  = 1/2*x'*Qij*x - rcicj^2 = 0; i=2,2,3; j=3,1,1
+      % Dhij = Qij*x
+      f = []; feq = []; Df = []; Dfeq = [];
+      Z = zeros(3);
+      I = eye(3);
+      Q23 = 2*Qij(2,3);
+      Q21 = 2*Qij(2,1);
+      Q31 = 2*Qij(3,1);
+      function Q = Qij(ii,jj)
+        Q = zeros(12);
+        Q(3*(ii-1)+(1:3),3*(ii-1)+(1:3)) = eye(3);
+        Q(3*(jj-1)+(1:3),3*(jj-1)+(1:3)) = eye(3);
+        Q(3*(ii-1)+(1:3),3*(jj-1)+(1:3)) = -eye(3);
+        Q(3*(jj-1)+(1:3),3*(ii-1)+(1:3)) = -eye(3);
+      end
+      feq(1,1) = 1/2*x'*Q23*x - params.rc2c3'*params.rc2c3;
+      feq(1,2) = 1/2*x'*Q21*x - params.rc2c1'*params.rc2c1;
+      feq(1,3) = 1/2*x'*Q31*x - params.rc3c1'*params.rc3c1;
+      
+      Dfeq(:,1) = Q23*x;
+      Dfeq(:,2) = Q21*x;
+      Dfeq(:,3) = Q31*x;
+    end
+    
+    function [f,feq,Df,Dfeq] = normalHorzFunGrad(x,params)
+      % h  = 1/2*x'*Q*x - rc2c3j*rc2c1 = 0
+      % Dh = Q*x
+      f = []; feq = []; Df = []; Dfeq = [];
+      Q1 = zeros(12);
+      Q2 = zeros(12);
+      Z = zeros(3);
+      S1 = skew([1;0;0]);
+      S2 = skew([0;1;0]);
+      inds = 4:12;
+      Q1(inds,inds) = skewBlock(S1);
+      Q2(inds,inds) = skewBlock(S2);
+      feq(1,1) = 1/2*x'*Q1*x;
+      Dfeq(:,1) = Q1*x;
+      feq(1,2) = 1/2*x'*Q2*x;
+      Dfeq(:,2) = Q2*x;
+    end
+    function [f,feq,Df,Dfeq] = normalVertFunGrad(x,params)
+      % h  = 1/2*x'*Q*x - rc2c3j*rc2c1 = 0
+      % Dh = Q*x
+      f = []; feq = []; Df = []; Dfeq = [];
+      Q3 = zeros(12);
+      S3 = skew([0;0;1]);
+      inds = 4:12;
+      Q3(inds,inds) = skewBlock(S3);
+      feq(1,1) = 1/2*x'*Q3*x - norm(params.rc2c3)*norm(params.rc2c1);
+      Dfeq(:,1) = Q3*x;
+    end
+    function [Ag,bg] = objFunParams(calibPointsDataHomed,spheroRadius)
+      rs = spheroRadius;
+      data = calibPointsDataHomed;
+      M = length(data); % should be 3 points
+      % assume proper format of data in struct fields
+      Pvec = [data.numSamples];
+      % build matrices
+      Ag = zeros(3*sum(Pvec),3*(M+1));
+      bg = zeros(3*sum(Pvec),1);
+      for ii = 1:length(data)
+        % for each calibration point, make subblocks of global matrix
+        P = Pvec(ii);
+        RU = data(ii).RU;
+        RL = data(ii).RL;
+        RH = data(ii).RH;
+        A = zeros(3*P,3);
+        b = zeros(3*P,1);
+        for kk = 1:P
+          % for each realization, assign part of submatrices
+          r = 3*(kk-1)+1;
+          A(r:r+2,:) = [RU(:,1,kk),RL(:,1,kk),RH(:,1,kk)];
+          b(3*(kk-1)+1:3*kk) = rs*RH(:,3,kk);
+        end
+        % stuff subblocks into global matrices
+        % put A subblock into Ag
+        rg = 3*sum(Pvec(1:ii-1))+1; % insertion row index
+        Ag(rg:rg+3*P-1,1:3) = A;
+        % put identity subblock in Ag
+        cg = 3*(ii-1)+1+3; % insertion column index
+        Ag(rg:rg+3*P-1,cg:cg+2) = repmat(-eye(3),[P,1]);
+        % put b subblock into bg
+        bg(rg:rg+3*P-1) = b;
+      end
+    end
+    function dataHomed = homeData(calib,data)
+      dataHomed = data;
+      for ii=1:length(data)
+        for kk = 1:data(ii).numSamples
+          dataHomed(ii).RU(:,:,kk) = calib.RFNU'*data(ii).RU(:,:,kk);
+          dataHomed(ii).RL(:,:,kk) = calib.RFNL'*data(ii).RL(:,:,kk);
+          dataHomed(ii).RH(:,:,kk) = calib.RFNH'*data(ii).RH(:,:,kk);
+        end
+      end
+    end
+    function [f,Df] = objFun(x,params)
+      A = params.Ag;
+      b = params.bg;
+      f = 0.5*x'*A'*A*x - x'*A'*b+b'*b;
+      Df = A'*A*x - A'*b;
+    end
+    function params = makeCalibParams(calib,data,conSpec)
+      % About conSpec:
+      % select constraints
+      % params.conSpec = {};
+      % params.conSpec(end+1) = {'dist'};          % nonlinear distance constraints
+      % params.conSpec(end+1) = {'orientNormal'};  % nonlinear constraints on nT vertical
+      % params.conSpec(end+1) = {'orientPlanar'};  % linear constraints on vectors in the horizontal plane
+      % params.conSpec{end+1} = {'normalInPlane'}; % nonlinear constraint for orthogonality of xT and yT 
+      %
+      % modify constraints (currently not supported)
+      % params.conSpec(end+1) = {'distIneq'};         % use the inequality variant
+      % params.conSpec(end+1) = {'orientNormalIneq'}; % use the inequality variant
+      
+      if nargin<3 || isempty(conSpec)
+        conSpec = {'dist','orientPlanar','normalInPlane'};
+      end
+      
+      % make a dummy object to fetch default params
+      ms = MyoSpheroUpperLimb();
+      
+      params.calib = calib;
+      params.data = data;
+      
+      dataHomed = ms.homeData(calib,data);
+      params.dataHomed = dataHomed;
+      
+      [Ag,bg] = ms.objFunParams(dataHomed,38);
+      params.Ag = Ag;
+      params.bg = bg;
+      
+      params.dT0 = ms.dT0;
+      
+      params.lengthUpper = ms.lengthUpper;
+      params.lengthLower = ms.lengthLower;
+      params.lengthHand  = ms.lengthHand;
+      
+      params.rc2c1 = ms.rc2c1;
+      params.rc2c3 = ms.rc2c3;
+      params.rc3c1 = ms.rc3c1;
+      
+      params.conSpec = conSpec;
+      
+      clear ms;
+    end
+    function [xs,fval,exitFlag,output,lambda] = computeCalibration(params)
+      
+      LB = [0;0;0;repmat(-inf,[9,1])];
+      UB = inf(12,1);
+      Aeq = []; beq = [];
+      [Aeq_,beq_] = MyoSpheroUpperLimb.planarFun(params);
+      Aeq = [Aeq;Aeq_]; beq = [beq;beq_];
+      A = []; b = [];
+      
+      x0 = [...
+        params.lengthUpper;...
+        params.lengthLower;...
+        params.lengthHand;...
+        params.dT0 - params.rc2c1;...
+        params.dT0;...
+        params.dT0 - params.rc2c3];
+      
+      optimOpts = optimoptions('fmincon',...
+        'display','iter',...
+        'algorithm','sqp',...
+        'gradobj','on',...
+        'gradconstr','on',...
+        'tolfun',1e-9,...
+        'tolcon',1e-9);
+      objFunGrad = @(x)MyoSpheroUpperLimb.objFun(x,params);
+      nonlinConFunGrad = @(x)MyoSpheroUpperLimb.nonlinConFunGrad(x,params);
+      [xs,fval,exitFlag,output,lambda] = ...
+        fmincon(objFunGrad,x0,...
+        A,b,Aeq,beq,LB,UB,...
+        nonlinConFunGrad,...
+        optimOpts);
+    end
+    
+    function [lengths,dT,RT] = interpretCalibResult(xs)
+      ms = MyoSpheroUpperLimb();
+      
+      lengths = xs(1:3);
+      
+      dc1 = xs(4:6);
+      dc2 = xs(7:9);
+      dc3 = xs(10:12);
+      rc2c3 = dc2-dc3;
+      rc2c1 = dc2-dc1;
+      rc3c1 = dc3-dc1;
+      
+      dT = dc2;
+      
+      xT = rc2c3/norm(rc2c3);
+      yT = rc2c1/norm(rc2c1);
+      zT = skew(xT)*yT;
+      RT = [xT,yT,zT];
+      
+      % check xT,yT orthogonality
+      fprintf('xT''yT = %f\n',xT'*yT)
+      
+      % check xT,yT vertical components
+      fprintf('xT(3) = %f\n',xT(3));
+      fprintf('yT(3) = %f\n',yT(3));
+      
+      % relative vector lengths
+      fprintf('rc2c1 delta = %f\n',abs(norm(ms.rc2c1)-norm(rc2c1)));
+      fprintf('rc2c3 delta = %f\n',abs(norm(ms.rc2c3)-norm(rc2c3)));
+      fprintf('rc3c1 delta = %f\n',abs(norm(ms.rc3c1)-norm(rc3c1)));
+      
+      
     end
   end
 end
