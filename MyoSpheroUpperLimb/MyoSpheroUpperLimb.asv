@@ -18,8 +18,8 @@ classdef MyoSpheroUpperLimb < handle
     RFNH = eye(3)
     DUMMY_FILENAME = 'do-not-touch-me.mat'
     calibData
-    dT % TODO move this to dependent on dCiF
-    dTguess = [300;-250;-250]
+    dTF
+    dTFguess = [300;-250;-250]
   end
   properties (Dependent)
     data
@@ -226,7 +226,7 @@ classdef MyoSpheroUpperLimb < handle
         hx.Hgfx  = hgtransform('parent',hx.HL);
         % initialize graphics
         % TODO draw the task environment
-        this.drawSTL(hx.Tgfx,...
+        this.drawSTL(hxTgfx,...
           fullfile(this.installRootPath,'TASK_SPACE.stl'),0.5*[1,1,1],0.5);
         this.drawSTL(hx.Ugfx,...
           fullfile(this.installRootPath,'LEFT_UPPER.stl'),'r',0.5);
@@ -289,10 +289,10 @@ classdef MyoSpheroUpperLimb < handle
       set(hx.Hgfx,'matrix',scaleX(sxH));
       
       % task space update
-      dT = this.dT;
-      if isempty(dT); dT = this.dTguess; end
+      dTF = this.dTF;
+      if isempty(d
       
-      set(hx.T,'matrix',rt2tr(eye(3),dT));      
+      
       
       drawnow;
       
@@ -306,7 +306,6 @@ classdef MyoSpheroUpperLimb < handle
       % animatePlotUpperLimb(this,nameStr,dataStruct)
       %   Animate a data sequence
       % dispatch timer
-      disp wtf
       tmr = timer(...
         'executionmode','fixedrate',...
         'period',0.05,...
