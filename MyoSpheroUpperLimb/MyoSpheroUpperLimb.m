@@ -1,5 +1,6 @@
 classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
   properties
+    DEBUG_FLAG = true
     % handles to the devices
     myoMex
     sphero
@@ -38,6 +39,9 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       this.lengthUpper = this.DEFAULT_LENGTH_UPPER;
       this.lengthLower = this.DEFAULT_LENGTH_LOWER;
       this.lengthHand = this.DEFAULT_LENGTH_HAND;
+      this.dT = this.DEFAULT_DT;
+      this.RT = this.DEFAULT_RT;
+      
       this.DUMMY_FILENAME = fullfile(this.installRootPath(),this.DUMMY_FILENAME);
     end
     function delete(this)
@@ -201,6 +205,7 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
           'dataaspectratio',[1,1,1],...
           'xtick',[],'ytick',[],'ztick',[],...
           'xcolor',colorFig,'ycolor',colorFig,'zcolor',colorFig);
+        view(180,30);
         lighting(hx.hAxes,'phong');
         % initialize transforms
         hx.F     = hgtransform('parent',hx.hAxes);
@@ -215,13 +220,13 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
         % initialize graphics
         % TODO draw the task environment
         this.drawSTL(hx.Tgfx,...
-          fullfile(this.installRootPath,'TASK_SPACE.stl'),0.5*[1,1,1],0.5);
+          fullfile(this.installRootPath,'res','TASK_SPACE.stl'),0.5*[1,1,1],0.5);
         this.drawSTL(hx.Ugfx,...
-          fullfile(this.installRootPath,'LEFT_UPPER.stl'),'r',0.5);
+          fullfile(this.installRootPath,'res','LEFT_UPPER.stl'),'r',0.5);
         this.drawSTL(hx.Lgfx,...
-          fullfile(this.installRootPath,'LEFT_LOWER.stl'),'g',0.5);
+          fullfile(this.installRootPath,'res','LEFT_LOWER.stl'),'g',0.5);
         this.drawSTL(hx.Hgfx,...
-          fullfile(this.installRootPath,'LEFT_HAND.stl'),'b',0.5);
+          fullfile(this.installRootPath,'res','LEFT_HAND.stl'),'b',0.5);
         this.drawTriad(hx.U,100,4);
         this.drawTriad(hx.LU,100,4);
         this.drawTriad(hx.HL,100,4);
@@ -276,7 +281,7 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       set(hx.Lgfx,'matrix',scaleX(sxL));
       set(hx.Hgfx,'matrix',scaleX(sxH));
       
-      % task space update      
+      % task space update
       set(hx.T,'matrix',rt2tr(this.RT,this.dT));
       
       drawnow;
@@ -287,35 +292,33 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       end
     end
     
-    function animatePlotUpperLimb(this,nameStr,calibStruct,dataStruct)
+    function animatePlotUpperLimb(this,rate,nameStr,calibStruct,dataStruct)
       % animatePlotUpperLimb(this,nameStr,dataStruct)
       %   Animate a data sequence
       % dispatch timer
-      disp wtf
+      
       tmr = timer(...
         'executionmode','fixedrate',...
-        'period',0.05,...
-        'busymode','drop',...
+        'period',1/rate,...
+        'taskstoexecute',dataStruct.numSamples,...
+        'busymode','queue',...
         'timerfcn',@(src,evt)this.animatePlotUpperLimbCallback(src,evt,nameStr,calibStruct,dataStruct),...
         'stopfcn',@(src,evt)delete(src));
       start(tmr);
     end
     function animatePlotUpperLimbCallback(this,src,evt,nameStr,calibStruct,dataStruct)
-      %idx = src.TasksExecuted;
-      if isempty(src.UserData)
-        src.UserData = datenum(evt.Data.time);
-      end
-      currTime = (datenum(evt.Data.time)-src.UserData)*60*60*24;
-      idx = round(currTime*this.SAMPLE_RATE);
-      if idx>0 && idx<=dataStruct.numSamples
-        dataSample = this.makeDataStruct(...
-          dataStruct.RU(:,:,idx),...
-          dataStruct.RL(:,:,idx),...
-          dataStruct.RH(:,:,idx));
-        this.drawPlotUpperLimb(nameStr,calibStruct,dataSample);
-      else
+      idx = src.UserData; % holds the next index to plot
+      if isempty(idx), idx = 1; end
+      if idx == dataStruct.numSamples
         stop(src);
+        return;
       end
+      dataSample = this.makeDataStruct(...
+        dataStruct.RU(:,:,idx),...
+        dataStruct.RL(:,:,idx),...
+        dataStruct.RH(:,:,idx));
+      this.drawPlotUpperLimb(nameStr,calibStruct,dataSample);
+      src.UserData = idx+1;
     end
   end
   methods (Static)
@@ -526,14 +529,14 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       % params.conSpec(end+1) = {'dist'};          % nonlinear distance constraints
       % params.conSpec(end+1) = {'orientNormal'};  % nonlinear constraints on nT vertical
       % params.conSpec(end+1) = {'orientPlanar'};  % linear constraints on vectors in the horizontal plane
-      % params.conSpec{end+1} = {'normalInPlane'}; % nonlinear constraint for orthogonality of xT and yT 
+      % params.conSpec{end+1} = {'normalInPlane'}; % nonlinear constraint for orthogonality of xT and yT
       %
       % modify constraints (currently not supported)
       % params.conSpec(end+1) = {'distIneq'};         % use the inequality variant
       % params.conSpec(end+1) = {'orientNormalIneq'}; % use the inequality variant
       
       if nargin<3 || isempty(conSpec)
-        conSpec = {'dist','orientPlanar','normalInPlane'};
+        conSpec = {'dist','ortho','planar'};
       end
       
       % make a dummy object to fetch default params
@@ -591,7 +594,7 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       if exitFlag<1
         warning('Calibration may not be successful!');
       end
-    end    
+    end
     function [lengths,dT,RT] = interpretCalibResult(xs)
       
       lengths = xs(1:3);
@@ -610,15 +613,18 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       zT = skew(xT)*yT;
       RT = [xT,yT,zT];
       
-      if DEBUG_FLAG
-        
+      %%%
+      % DEBUG STUFF BELOW ...
+      
+      msc = MyoSpheroUpperLimbConstants();
+      
       nT = skew(rc2c3)*rc2c1;
       
       % relative vector lengths
       fprintf('dist\n');
-      fprintf('rc2c1 delta = %f\n',abs(norm(ms.rc2c1)-norm(rc2c1)));
-      fprintf('rc2c3 delta = %f\n',abs(norm(ms.rc2c3)-norm(rc2c3)));
-      fprintf('rc3c1 delta = %f\n',abs(norm(ms.rc3c1)-norm(rc3c1)));
+      fprintf('rc2c1 delta = %f\n',abs(norm(msc.rc2c1)-norm(rc2c1)));
+      fprintf('rc2c3 delta = %f\n',abs(norm(msc.rc2c3)-norm(rc2c3)));
+      fprintf('rc3c1 delta = %f\n',abs(norm(msc.rc3c1)-norm(rc3c1)));
       fprintf('\n');
       
       % check xT,yT orthogonality
@@ -632,7 +638,6 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       fprintf('yT(3) = %f\n',yT(3));
       fprintf('\n');
       
-      
       fprintf('normalHorz\n');
       fprintf('nT(1) = %f\n',nT(1));
       fprintf('nT(2) = %f\n',nT(2));
@@ -641,7 +646,6 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       fprintf('normalVert\n');
       fprintf('nT(3) delta = %f\n',nT(3)-norm(rc2c3)*norm(rc2c1));
       fprintf('\n');
-      end % DEBUG_FLAG
       
     end
   end

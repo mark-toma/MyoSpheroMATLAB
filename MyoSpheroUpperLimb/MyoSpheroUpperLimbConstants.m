@@ -1,4 +1,4 @@
-classdef MyoSpheroUpperLimbConstants < handle
+classdef (HandleCompatible) MyoSpheroUpperLimbConstants < handle
   properties (Constant)
     SAMPLE_RATE = 50
     SPHERO_REMOTE_NAME = 'Sphero-WPP'
@@ -19,6 +19,7 @@ classdef MyoSpheroUpperLimbConstants < handle
     rc3c1 = [-350.07;197.67;0];
     
     DEFAULT_DT = [300;-250;-250];
+    DEFAULT_RT = eye(3);
     
   end
 end
