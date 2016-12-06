@@ -1,4 +1,4 @@
-classdef MyoSpheroUpperLimb < handle
+classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
   properties
     % handles to the devices
     myoMex
@@ -18,8 +18,8 @@ classdef MyoSpheroUpperLimb < handle
     RFNH = eye(3)
     DUMMY_FILENAME = 'do-not-touch-me.mat'
     calibData
-    dT % TODO move this to dependent on dCiF
-    dT0 = [300;-250;-250]
+    dT
+    RT
   end
   properties (Dependent)
     data
@@ -30,25 +30,6 @@ classdef MyoSpheroUpperLimb < handle
     RH_source
     idxTail
     calib
-  end
-  properties (Constant)
-    SAMPLE_RATE = 50
-    SPHERO_REMOTE_NAME = 'Sphero-WPP'
-    SPHERO_FRAME_RATE  = 50 % 50
-    SPHERO_FRAME_COUNT = 4 % 2
-    SPHERO_SENSORS = {'Q0','Q1','Q2','Q3'}
-    % the upper dims conform to: dLU = [LENGTH;0;OFFSET]
-    DEFAULT_LENGTH_UPPER = 280
-    OFFSET_UPPER = 35
-    DEFAULT_LENGTH_LOWER = 290
-    % default dSH = [LENGTH_HAND;0;-38(radius of sphero)]
-    DEFAULT_LENGTH_HAND  = 50
-    RADIUS_SPHERO = 38
-    
-    rc2c1 = [0;197.67;0];
-    rc2c3 = [350.07;0;0];
-    rc3c1 = [-350.07;197.67;0];
-    
   end
   
   methods
@@ -140,20 +121,14 @@ classdef MyoSpheroUpperLimb < handle
     function calibrate(this,calibPointsData)
       calib = this.calib;
       data = calibPointsData;
-      
       params = this.makeCalibParams(calib,data,{'dist','orientPlanar'});
       [xs,fval,exitFlag,output,lambda] = this.computeCalibration(params);
-      
       [lengths,dT,RT] = this.interpretCalibResult(xs);
       this.lengthUpper = lengths(1);
       this.lengthLower = lengths(2);
       this.lengthHand  = lengths(3);
       this.dT = dT;
       this.RT = RT;
-      
-      for ii=1:length(calibPointsData)
-        calibPointsData(ii)
-      end
     end
     function val = popRotData(this)
       % maybe we need to leave a sample in here...
@@ -301,11 +276,8 @@ classdef MyoSpheroUpperLimb < handle
       set(hx.Lgfx,'matrix',scaleX(sxL));
       set(hx.Hgfx,'matrix',scaleX(sxH));
       
-      % task space update
-      dT = this.dT;
-      if isempty(dT); dT = this.dTguess; end
-      
-      set(hx.T,'matrix',rt2tr(eye(3),dT));
+      % task space update      
+      set(hx.T,'matrix',rt2tr(this.RT,this.dT));
       
       drawnow;
       
@@ -565,31 +537,30 @@ classdef MyoSpheroUpperLimb < handle
       end
       
       % make a dummy object to fetch default params
-      ms = MyoSpheroUpperLimb();
+      msc = MyoSpheroUpperLimbConstants();
       
       params.calib = calib;
       params.data = data;
       
-      dataHomed = ms.homeData(calib,data);
+      dataHomed = MyoSpheroUpperLimb.homeData(calib,data);
       params.dataHomed = dataHomed;
       
-      [Ag,bg] = ms.objFunParams(dataHomed,38);
+      [Ag,bg] = MyoSpheroUpperLimb.objFunParams(dataHomed,38);
       params.Ag = Ag;
       params.bg = bg;
       
-      params.dT0 = ms.dT0;
+      params.dT0 = msc.DEFAULT_DT;
       
-      params.lengthUpper = ms.lengthUpper;
-      params.lengthLower = ms.lengthLower;
-      params.lengthHand  = ms.lengthHand;
+      params.lengthUpper = msc.DEFAULT_LENGTH_UPPER;
+      params.lengthLower = msc.DEFAULT_LENGTH_LOWER;
+      params.lengthHand  = msc.DEFAULT_LENGTH_HAND;
       
-      params.rc2c1 = ms.rc2c1;
-      params.rc2c3 = ms.rc2c3;
-      params.rc3c1 = ms.rc3c1;
+      params.rc2c1 = msc.rc2c1;
+      params.rc2c3 = msc.rc2c3;
+      params.rc3c1 = msc.rc3c1;
       
       params.conSpec = conSpec;
       
-      clear ms;
     end
     function [xs,fval,exitFlag,output,lambda] = computeCalibration(params)
       
@@ -622,7 +593,6 @@ classdef MyoSpheroUpperLimb < handle
       end
     end    
     function [lengths,dT,RT] = interpretCalibResult(xs)
-      ms = MyoSpheroUpperLimb();
       
       lengths = xs(1:3);
       
@@ -640,6 +610,8 @@ classdef MyoSpheroUpperLimb < handle
       zT = skew(xT)*yT;
       RT = [xT,yT,zT];
       
+      if DEBUG_FLAG
+        
       nT = skew(rc2c3)*rc2c1;
       
       % relative vector lengths
@@ -669,6 +641,7 @@ classdef MyoSpheroUpperLimb < handle
       fprintf('normalVert\n');
       fprintf('nT(3) delta = %f\n',nT(3)-norm(rc2c3)*norm(rc2c1));
       fprintf('\n');
+      end % DEBUG_FLAG
       
     end
   end
