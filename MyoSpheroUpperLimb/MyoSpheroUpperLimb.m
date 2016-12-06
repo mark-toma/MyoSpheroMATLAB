@@ -217,6 +217,7 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
         hx.Lgfx  = hgtransform('parent',hx.LU);
         hx.HL    = hgtransform('parent',hx.LU);
         hx.Hgfx  = hgtransform('parent',hx.HL);
+        hx.SH    = hgtransform('parent',hx.HL);
         % initialize graphics
         % TODO draw the task environment
         this.drawSTL(hx.Tgfx,...
@@ -230,7 +231,16 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
         this.drawTriad(hx.U,100,4);
         this.drawTriad(hx.LU,100,4);
         this.drawTriad(hx.HL,100,4);
+        this.drawTriad(hx.SH,100,4);
         this.drawTriad(hx.F,400,4);
+        this.drawTriad(hx.T,400,4);
+        
+        [xs,ys,zs] = sphere(20);
+        rs = 38;
+        surf(rs*xs,rs*ys,rs*zs,...
+          'parent',hx.SH,...
+          'facecolor','w',...
+          'facealpha',0.5);
         
         % store in plotTable
         this.plotTable{end+1,1} = nameStr; % push name
@@ -280,6 +290,9 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       set(hx.Ugfx,'matrix',scaleX(sxU));
       set(hx.Lgfx,'matrix',scaleX(sxL));
       set(hx.Hgfx,'matrix',scaleX(sxH));
+      
+      % sphero
+      set(hx.SH,'matrix',rt2tr(eye(3),[this.lengthHand;0;-38]));
       
       % task space update
       set(hx.T,'matrix',rt2tr(this.RT,this.dT));
