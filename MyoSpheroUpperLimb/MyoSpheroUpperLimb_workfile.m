@@ -20,8 +20,16 @@ data = ws.calibPointsData;
 clear ws
 
 ms = MyoSpheroUpperLimb;
-params = ms.makeCalibParams(calib,data,{'dist','ortho'})
-xs = ms.computeCalibration(params);
+conSpec = {};
+conSpec(end+1) = {'dist'};
+conSpec(end+1) = {'ortho'};
+% conSpec(end+1) = {'planar'};
+% conSpec(end+1) = {'normalVert'};
+conSpec(end+1) = {'normalVertIneq'};
+% conSpec(end+1) = {'normalHorz'};
+
+params = ms.makeCalibParams(calib,data,conSpec);
+[xs,~,~,~,lambda] = ms.computeCalibration(params);
 [lengths,dT,RT] = ms.interpretCalibResult(xs);
 
 ms.lengthUpper = lengths(1);
@@ -29,8 +37,6 @@ ms.lengthLower = lengths(2);
 ms.lengthHand  = lengths(3);
 ms.dT = dT;
 ms.RT = RT;
-
-
 
 
 %%

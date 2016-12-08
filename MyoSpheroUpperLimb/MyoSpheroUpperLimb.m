@@ -386,6 +386,7 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       %     'dist' - select the distance constraints
       %     'ortho' - xT and yT orthogonal
       %     'normalVert' - nT vertical component
+      %     'normalVertIneq' - nT vertical component
       %     'normalHorz' - nT horizontal components
       %
       % Note on dimensions of constraintf f and constraint gradients Df...
@@ -406,6 +407,10 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       end
       if ismember('normalVert',params.conSpec)
         [f,feq,Df,Dfeq] = MyoSpheroUpperLimb.normalVertFunGrad(x,params);
+        pushNewCons();
+      end
+      if ismember('normalVertIneq',params.conSpec)
+        [f,feq,Df,Dfeq] = MyoSpheroUpperLimb.normalVertIneqFunGrad(x,params);
         pushNewCons();
       end
       if ismember('normalHorz',params.conSpec)
@@ -485,6 +490,17 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       feq(1,1) = 1/2*x'*Q3*x - norm(params.rc2c3)*norm(params.rc2c1);
       Dfeq(:,1) = Q3*x;
     end
+    function [f,feq,Df,Dfeq] = normalVertIneqFunGrad(x,params)
+      % h  = -1/2*x'*Q*x <= 0
+      % Dh = Q*x
+      f = []; feq = []; Df = []; Dfeq = [];
+      Q3 = zeros(12);
+      S3 = skew([0;0;1]);
+      inds = 4:12;
+      Q3(inds,inds) = skewBlock(S3);
+      f(1,1) = 1/2*x'*Q3*x - norm(params.rc2c3)*norm(params.rc2c1);
+      Df(:,1) = Q3*x;
+    end
     function [Ag,bg] = objFunParams(calibPointsDataHomed,spheroRadius)
       rs = spheroRadius;
       data = calibPointsDataHomed;
@@ -537,16 +553,6 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
     end
     function params = makeCalibParams(calib,data,conSpec)
       % About conSpec:
-      % select constraints
-      % params.conSpec = {};
-      % params.conSpec(end+1) = {'dist'};          % nonlinear distance constraints
-      % params.conSpec(end+1) = {'orientNormal'};  % nonlinear constraints on nT vertical
-      % params.conSpec(end+1) = {'orientPlanar'};  % linear constraints on vectors in the horizontal plane
-      % params.conSpec{end+1} = {'normalInPlane'}; % nonlinear constraint for orthogonality of xT and yT
-      %
-      % modify constraints (currently not supported)
-      % params.conSpec(end+1) = {'distIneq'};         % use the inequality variant
-      % params.conSpec(end+1) = {'orientNormalIneq'}; % use the inequality variant
       
       if nargin<3 || isempty(conSpec)
         conSpec = {'dist','ortho','planar'};
