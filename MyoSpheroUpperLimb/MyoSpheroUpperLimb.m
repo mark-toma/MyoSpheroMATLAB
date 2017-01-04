@@ -99,6 +99,11 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       val.RFNH = this.RFNH;
       % TODO ... and more
     end
+    function setCalib(this,val)
+      this.RFNU = val.RFNU;
+      this.RFNL = val.RFNL;
+      this.RFNH = val.RFNH;
+    end
     %% --- Device
     function connectDevices(this)
       % connectDevices  Connects to the Myos and Sphero
@@ -125,7 +130,7 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
     function calibrate(this,calibPointsData)
       calib = this.calib;
       data = calibPointsData;
-      params = this.makeCalibParams(calib,data,{'dist','orientPlanar'});
+      params = this.makeCalibParams(calib,data,{'ortho','dist','normalVert'});
       [xs,fval,exitFlag,output,lambda] = this.computeCalibration(params);
       [lengths,dT,RT] = this.interpretCalibResult(xs);
       this.lengthUpper = lengths(1);
@@ -309,20 +314,21 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       % animatePlotUpperLimb(this,nameStr,dataStruct)
       %   Animate a data sequence
       % dispatch timer
-      
+      updateRate = 25; % hz
+      sampleIncrement = ceil(updateRate/50);
       tmr = timer(...
         'executionmode','fixedrate',...
-        'period',1/rate,...
+        'period',updateRate,...
         'taskstoexecute',dataStruct.numSamples,...
         'busymode','queue',...
-        'timerfcn',@(src,evt)this.animatePlotUpperLimbCallback(src,evt,nameStr,calibStruct,dataStruct),...
+        'timerfcn',@(src,evt)this.animatePlotUpperLimbCallback(src,evt,nameStr,calibStruct,dataStruct,e,sampleIncrement),...
         'stopfcn',@(src,evt)delete(src));
       start(tmr);
     end
-    function animatePlotUpperLimbCallback(this,src,evt,nameStr,calibStruct,dataStruct)
+    function animatePlotUpperLimbCallback(this,src,evt,nameStr,calibStruct,dataStruct,sampleIncrement)
       idx = src.UserData; % holds the next index to plot
       if isempty(idx), idx = 1; end
-      if idx == dataStruct.numSamples
+      if idx >= dataStruct.numSamples
         stop(src);
         return;
       end
@@ -331,7 +337,7 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
         dataStruct.RL(:,:,idx),...
         dataStruct.RH(:,:,idx));
       this.drawPlotUpperLimb(nameStr,calibStruct,dataSample);
-      src.UserData = idx+1;
+      src.UserData = idx+sampleIncrement;
     end
   end
   methods (Static)
@@ -555,7 +561,7 @@ classdef MyoSpheroUpperLimb < handle & MyoSpheroUpperLimbConstants
       % About conSpec:
       
       if nargin<3 || isempty(conSpec)
-        conSpec = {'dist','ortho','planar'};
+        conSpec = {'dist','ortho','normalVert'};
       end
       
       % make a dummy object to fetch default params
