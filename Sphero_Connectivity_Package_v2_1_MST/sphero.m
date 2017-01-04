@@ -159,8 +159,8 @@ classdef sphero<handle
       for kk = 1:size(rot,3)
         s = quat(kk,1); v = quat(kk,2:4)';
         vt = [0,-v(3),v(2);v(3),0,-v(1);-v(2),v(1),0]; % cross matrix
-        % rot(:,:,kk) = eye(3) + 2*v*v' - 2*v'*v*eye(3) + 2*s*vt;
-        rot(:,:,kk) = (s^2-2*v'*v)*eye(3) + 2*(v*v' + s*vt);
+        rot(:,:,kk) = eye(3) + 2*v*v' - 2*v'*v*eye(3) + 2*s*vt;
+        % rot(:,:,kk) = (s^2-2*v'*v)*eye(3) + 2*(v*v' + s*vt);
       end
     end
     function varargout = simpleResponse(response)

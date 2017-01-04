@@ -14,7 +14,7 @@ names = names(ids);
 
 ms = MyoSpheroUpperLimb;
 
-ii = 1;
+ii = 4;
 fName = names{ii};
 load(fName);
 dataRaw = data;
@@ -23,9 +23,8 @@ dataRaw = data;
 timesCalib = [3,5;12,15;22,25];
 timesReach = [7,10;17,20;27,30];
 
-for jj = 1:2%size(timesCalib,1)
+for jj = 1:size(timesCalib,1)
   ids = 50*timesCalib(jj,1):50*timesCalib(jj,2);
-  ids = ids(ids<dataRaw.numSamples);
   RU = dataRaw.RU(:,:,ids);
   RL = dataRaw.RL(:,:,ids);
   RH = dataRaw.RH(:,:,ids);
@@ -34,7 +33,7 @@ for jj = 1:2%size(timesCalib,1)
   end
   dataCalib(jj) = ms.makeDataStruct(RU,RL,RH);
 end
-for jj = 1:2%size(timesReach,1)
+for jj = 1:size(timesReach,1)
   ids = 50*timesReach(jj,1):50*timesReach(jj,2);
   RU = dataRaw.RU(:,:,ids);
   RL = dataRaw.RL(:,:,ids);
